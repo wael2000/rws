@@ -82,7 +82,7 @@ spec:
             - name: postgresql-data
               mountPath: /var/lib/pgsql/data
           terminationMessagePolicy: File
-          image: 'image-registry.openshift-image-registry.svc:5000/openshift/postgresql'
+          image: 'image-registry.openshift-image-registry.svc:5000/openshift/postgresql:latest'
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
