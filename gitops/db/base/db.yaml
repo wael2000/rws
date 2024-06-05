@@ -24,7 +24,7 @@ spec:
           kind: ImageStreamTag
           namespace: openshift
           name: 'postgresql:10-el8'
-        #lastTriggeredImage: 'image-registry.openshift-image-registry.svc:5000/openshift/postgresql'
+        lastTriggeredImage: 'image-registry.openshift-image-registry.svc:5000/openshift/postgresql'
     - type: ConfigChange
   replicas: 1
   revisionHistoryLimit: 10
