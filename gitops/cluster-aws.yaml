@@ -1,0 +1,130 @@
+kind: Project
+apiVersion: project.openshift.io/v1
+metadata:
+  name: aws
+spec:
+  finalizers:
+    - kubernetes
+---
+apiVersion: hive.openshift.io/v1
+kind: ClusterDeployment
+metadata:
+  name: aws
+  namespace: aws
+  labels:
+    cloud: AWS
+    region: eu-west-1
+    vendor: OpenShift
+    cluster.open-cluster-management.io/clusterset: default
+spec:
+  baseDomain: sandbox293.opentlc.com
+  clusterName: aws
+  controlPlaneConfig:
+    servingCertificates: {}
+  installAttemptsLimit: 1
+  installed: false
+  platform:
+    aws:
+      credentialsSecretRef:
+        name: aws-aws-creds
+      region: eu-west-1
+  provisioning:
+    installConfigSecretRef:
+      name: aws-install-config
+    sshPrivateKeySecretRef:
+      name: aws-ssh-private-key
+    imageSetRef:
+      name: img4.15.15-multi-appsub
+  pullSecretRef:
+    name: aws-pull-secret
+---
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  name: aws
+  labels:
+    name: aws
+    cloud: Amazon
+    region: eu-west-1
+    vendor: OpenShift
+    cluster.open-cluster-management.io/clusterset: default
+    env: aws
+spec:
+  hubAcceptsClient: true
+---
+apiVersion: hive.openshift.io/v1
+kind: MachinePool
+metadata:
+  name: aws-worker
+  namespace: aws
+spec:
+  name: worker
+  clusterDeploymentRef:
+    name: aws
+  platform:
+    aws:
+      rootVolume:
+        iops: 2000
+        size: 100
+        type: io1
+      type: m5.xlarge
+  replicas: 0
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aws-pull-secret
+  namespace: aws
+stringData:
+  .dockerconfigjson: eyJhdXRocyI6eyJjbG91ZC5vcGVuc2hpZnQuY29tIjp7ImF1dGgiOiJiM0JsYm5Ob2FXWjBMWEpsYkdWaGMyVXRaR1YySzNkbGJHUnZZVzFwTVdWdmNUTm9kbmhrWkc5bVoybGxNV0ZvYVdSa01qUnRhbkprT2xCUFRsVk9RVmsyVjFoWVV6UklVREpZVTFJMFR6Sk1TVGMzUWxsVFdEaE5SRkJSUjFBMlYxUlhOVUl5T1RWWVNFdE1NRXBLU0RoUldWSlNSa00yTkVrPSIsImVtYWlsIjoid2VsZG9hbWlAcmVkaGF0LmNvbSJ9LCJxdWF5LmlvIjp7ImF1dGgiOiJiM0JsYm5Ob2FXWjBMWEpsYkdWaGMyVXRaR1YySzNkbGJHUnZZVzFwTVdWdmNUTm9kbmhrWkc5bVoybGxNV0ZvYVdSa01qUnRhbkprT2xCUFRsVk9RVmsyVjFoWVV6UklVREpZVTFJMFR6Sk1TVGMzUWxsVFdEaE5SRkJSUjFBMlYxUlhOVUl5T1RWWVNFdE1NRXBLU0RoUldWSlNSa00yTkVrPSIsImVtYWlsIjoid2VsZG9hbWlAcmVkaGF0LmNvbSJ9LCJyZWdpc3RyeS5jb25uZWN0LnJlZGhhdC5jb20iOnsiYXV0aCI6Ik5UQTRPVGt3TWpWOGRXaGpMVEZGVDNFelNIWjRSRVJ2Wm1kcFJURkJTRWxFWkRJMGJXcFNaRHBsZVVwb1lrZGphVTlwU2xOVmVsVjRUV2xLT1M1bGVVcDZaRmRKYVU5cFNYbFpWRkV5VFdwQmQwMHlTVEZaYWxFd1dYcEJORmxxUlhoTk1rMDBXa1JTYlU1cVZURk5lbEpxVGtOS09TNVBaREV6T1U4M1MzVnhabk4wZWtkWGVFWTJNbU5YV2pjeFowWldSREJtVERJMWFYcHROV2RLTkdoM01FUkJSMVF4UTFoVFpYaFNZa1JmUlhwRk1VWm9hVFEzWlRKNmJWaE9MV1k0VmpCVFVqTlNRbmxOTTJONmJrSXdlVzFpWmw5Uk16UmxVV1JOZW1keVIydzJaeTF5U2sxamFUZzNTemx4WVRaalZGbHJjWFJMUlhOVFNUZHNiSEpKV2xGRGJVaEdOVEExYUdSbFlXMWhPRXRIU2s1cFRVaHJhakZqY1VWRFZ6YzFSR05yWHpCclFqTmlhWE5ZTjI1alNGQk9jRXB4UzJaRVJEaEpaM1pKVXpSb00zZHpiV3hITlZjeVdHcDNlSFp2UTFwNExVRjBlSFZJTTFSUlpHVmtSbVEzWmtSd1VGODJkMGxaWW5CemQwWXlkMEpLZUhRd2VVbFdSVUpWYkVzemJqWjFhVkZpYm1WalpGOTBPV2hwTkdsVVoxaGFWa3BFVVU1R09XOXBiVTVSVWt3Mk1rMUhYMUZJTWs1ZmVtaGxaVE52ZUZodmVHNU9ha0oyUjFSdVRHUnZla2RRY21KWVlURTRiVTlzUmtSSmIyNVFhMEYyYm05dVIxaE9hVGRMTmpOMGEwWk1ZV2hMYVc1UlRVaE1aVWw1V0c1blZtWkljMFU1VHpCaGQyZFVkbk5OYUdac1dXbDRVemczT0ZWZlRFTnFaM1pxTkVsZlNXOUxTREpYWmxOUVpVZGtVa1Y0VG01NlZVdzJVRWw2UlZWaGNXNVdkbm8zVDA0eVJGbDFSVXd0VmpKRUxWOWpZbU5HT1ZaMlRUUjRNRTFQUlZsMk4xWlBNVXhUVmpoUE9WQlhTbmRMY1ZJMWFXWnJaMGRuV1VkaFJXOU5TbVF0WlhZdFpUWkxVMUpLTUU5S01WazFTM2RVYW5CWFJXNTNhR2hCVmxCRVdEaFhOMmt5ZWpaWlNUQm1TSGhPZEZoaVN6VktSV3BzVlVselIydzNaMU4yY21WbFNtdGpOSFpPTmxOUWIwSmlOMUpNWm5obVMwbDNaSEl5YWxoQlZYbEtiM281ZVZsdlFtVXhSMEYyWVhoUVZGbFRSVmxMY1U1R1pFdGlkWFJFZVRKemNIY3lOV3M1WTAxMVpGQkdPSG8wUXpkRU0ydFhSM1ZpYVRWNmFIcDZjWE4xVVdkbWN3PT0iLCJlbWFpbCI6IndlbGRvYW1pQHJlZGhhdC5jb20ifSwicmVnaXN0cnkucmVkaGF0LmlvIjp7ImF1dGgiOiJOVEE0T1Rrd01qVjhkV2hqTFRGRlQzRXpTSFo0UkVSdlptZHBSVEZCU0VsRVpESTBiV3BTWkRwbGVVcG9Za2RqYVU5cFNsTlZlbFY0VFdsS09TNWxlVXA2WkZkSmFVOXBTWGxaVkZFeVRXcEJkMDB5U1RGWmFsRXdXWHBCTkZscVJYaE5NazAwV2tSU2JVNXFWVEZOZWxKcVRrTktPUzVQWkRFek9VODNTM1Z4Wm5OMGVrZFhlRVkyTW1OWFdqY3haMFpXUkRCbVRESTFhWHB0TldkS05HaDNNRVJCUjFReFExaFRaWGhTWWtSZlJYcEZNVVpvYVRRM1pUSjZiVmhPTFdZNFZqQlRVak5TUW5sTk0yTjZia0l3ZVcxaVpsOVJNelJsVVdSTmVtZHlSMncyWnkxeVNrMWphVGczU3pseFlUWmpWRmxyY1hSTFJYTlRTVGRzYkhKSldsRkRiVWhHTlRBMWFHUmxZVzFoT0V0SFNrNXBUVWhyYWpGamNVVkRWemMxUkdOclh6QnJRak5pYVhOWU4yNWpTRkJPY0VweFMyWkVSRGhKWjNaSlV6Um9NM2R6Yld4SE5WY3lXR3AzZUhadlExcDRMVUYwZUhWSU0xUlJaR1ZrUm1RM1prUndVRjgyZDBsWlluQnpkMFl5ZDBKS2VIUXdlVWxXUlVKVmJFc3pialoxYVZGaWJtVmpaRjkwT1docE5HbFVaMWhhVmtwRVVVNUdPVzlwYlU1UlVrdzJNazFIWDFGSU1rNWZlbWhsWlROdmVGaHZlRzVPYWtKMlIxUnVUR1J2ZWtkUWNtSllZVEU0YlU5c1JrUkpiMjVRYTBGMmJtOXVSMWhPYVRkTE5qTjBhMFpNWVdoTGFXNVJUVWhNWlVsNVdHNW5WbVpJYzBVNVR6QmhkMmRVZG5OTmFHWnNXV2w0VXpnM09GVmZURU5xWjNacU5FbGZTVzlMU0RKWFpsTlFaVWRrVWtWNFRtNTZWVXcyVUVsNlJWVmhjVzVXZG5vM1QwNHlSRmwxUlV3dFZqSkVMVjlqWW1OR09WWjJUVFI0TUUxUFJWbDJOMVpQTVV4VFZqaFBPVkJYU25kTGNWSTFhV1pyWjBkbldVZGhSVzlOU21RdFpYWXRaVFpMVTFKS01FOUtNVmsxUzNkVWFuQlhSVzUzYUdoQlZsQkVXRGhYTjJreWVqWlpTVEJtU0hoT2RGaGlTelZLUldwc1ZVbHpSMnczWjFOMmNtVmxTbXRqTkhaT05sTlFiMEppTjFKTVpuaG1TMGwzWkhJeWFsaEJWWGxLYjNvNWVWbHZRbVV4UjBGMllYaFFWRmxUUlZsTGNVNUdaRXRpZFhSRWVUSnpjSGN5TldzNVkwMTFaRkJHT0hvMFF6ZEVNMnRYUjNWaWFUVjZhSHA2Y1hOMVVXZG1jdz09IiwiZW1haWwiOiJ3ZWxkb2FtaUByZWRoYXQuY29tIn19fQ== # injected on create
+type: kubernetes.io/dockerconfigjson
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aws-install-config
+  namespace: aws
+type: Opaque
+data:
+  install-config.yaml: YXBpVmVyc2lvbjogdjEKbWV0YWRhdGE6CiAgbmFtZTogYXdzCmJhc2VEb21haW46IHNhbmRib3gyOTMub3BlbnRsYy5jb20KY29udHJvbFBsYW5lOgogIG5hbWU6IG1hc3RlcgogIGFyY2hpdGVjdHVyZTogYW1kNjQKICBoeXBlcnRocmVhZGluZzogRW5hYmxlZAogIHJlcGxpY2FzOiAxCiAgcGxhdGZvcm06CiAgICBhd3M6CiAgICAgIHJvb3RWb2x1bWU6CiAgICAgICAgaW9wczogNDAwMAogICAgICAgIHNpemU6IDEwMAogICAgICAgIHR5cGU6IGlvMQogICAgICB0eXBlOiBtNS54bGFyZ2UKY29tcHV0ZToKICAtIG5hbWU6IHdvcmtlcgogICAgaHlwZXJ0aHJlYWRpbmc6IEVuYWJsZWQKICAgIGFyY2hpdGVjdHVyZTogYW1kNjQKICAgIHJlcGxpY2FzOiAwCiAgICBwbGF0Zm9ybToKICAgICAgYXdzOgogICAgICAgIHJvb3RWb2x1bWU6CiAgICAgICAgICBpb3BzOiAyMDAwCiAgICAgICAgICBzaXplOiAxMDAKICAgICAgICAgIHR5cGU6IGlvMQogICAgICAgIHR5cGU6IG01LnhsYXJnZQpuZXR3b3JraW5nOgogIG5ldHdvcmtUeXBlOiBPVk5LdWJlcm5ldGVzCiAgY2x1c3Rlck5ldHdvcms6CiAgICAtIGNpZHI6IDEwLjEyOC4wLjAvMTQKICAgICAgaG9zdFByZWZpeDogMjMKICBtYWNoaW5lTmV0d29yazoKICAgIC0gY2lkcjogMTAuMC4wLjAvMTYKICBzZXJ2aWNlTmV0d29yazoKICAgIC0gMTcyLjMwLjAuMC8xNgpwbGF0Zm9ybToKICBhd3M6CiAgICByZWdpb246IGV1LXdlc3QtMQpwdWxsU2VjcmV0OiAnJwpzc2hLZXk6IHNzaC1yc2EgQUFBQUIzTnphQzF5YzJFQUFBQURBUUFCQUFBQWdRRENsWVh2WWhYZXFnRFlTSnJzaGl0RVZpV054NU9mMkZBcmVtaEU0ZktXNjhsOXRuSCtycHR6dFBJWEVRWWJ0M3YwK01OaXBGNEp1YmJ5OUZGd2drQVM3a0JGQzZELzRFa0MyRmhmN0h1R09URTVCTVVDS0FyWkxzZ2ZieVl4am9ZeFJkUEVsekVPeGQ2end6TTlaWnQwNkxBd2gxRTV6dmpBZ3Fmc253bzNrUT09IG5vbmFtZQo=
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: aws-ssh-private-key
+  namespace: aws
+stringData:
+  ssh-privatekey:
+type: Opaque
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: aws-aws-creds
+  namespace: aws
+stringData:
+  aws_access_key_id: AKIAXBIRKVK74PMKFWZ3
+  aws_secret_access_key:
+---
+apiVersion: agent.open-cluster-management.io/v1
+kind: KlusterletAddonConfig
+metadata:
+  name: aws
+  namespace: aws
+spec:
+  clusterName: aws
+  clusterNamespace: aws
+  clusterLabels:
+    cloud: Amazon
+    vendor: OpenShift
+  applicationManager:
+    enabled: true
+  policyController:
+    enabled: true
+  searchCollector:
+    enabled: true
+  certPolicyController:
+    enabled: true
+  iamPolicyController:
+    enabled: true
