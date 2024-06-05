@@ -1,0 +1,207 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: db-config
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+data:
+  build_tables.sql: |-
+    alter table if exists Equipment drop constraint if exists FKs0a4mt3q33w668cpumbxobvy2;
+    alter table if exists Member drop constraint if exists FKfdl0v68x1q1llhloa4l1tskl4;
+
+    drop table if exists Battalion cascade;
+    drop table if exists Config cascade;
+    drop table if exists Equipment cascade;
+    drop table if exists Member cascade;
+
+    drop sequence if exists Config_SEQ;
+    drop sequence if exists Equipment_SEQ;
+    drop sequence if exists hibernate_sequence;
+
+    create sequence hibernate_sequence start 1 increment 1;
+    create sequence Config_SEQ start with 1 increment by 50;
+    create sequence Equipment_SEQ start with 1 increment by 50;
+
+    create table Battalion (
+        id bigint not null,
+        altitude float8 not null,
+        description varchar(255),
+        latitude float8 not null,
+        longitude float8 not null,
+        name varchar(255),
+        status varchar(255),
+        systemMode varchar(255),
+        systemStatus varchar(255),
+        azure boolean,
+        primary key (id)
+    );
+    
+    create table Config (
+            id bigint not null,
+            key varchar(255),
+            value varchar(255),
+            primary key (id)
+        );
+    create table Equipment (
+            battalion_id integer,
+            id bigint not null,
+            code varchar(255),
+            name varchar(255),
+            status varchar(255),
+            type varchar(255),
+            primary key (id)
+        );
+    create table Member (
+        id bigint not null,
+        email varchar(255),
+        name varchar(255),
+        rank varchar(255),
+        team_id int8,
+        primary key (id)
+    );   
+    alter table if exists Equipment 
+      add constraint FKs0a4mt3q33w668cpumbxobvy2 
+      foreign key (battalion_id) 
+      references Battalion;
+    alter table if exists Member 
+       add constraint FKfdl0v68x1q1llhloa4l1tskl4 
+       foreign key (team_id) 
+       references Battalion; 
+
+  create_database.sql: CREATE DATABASE battalion;
+  data.sql: |-
+    insert into Battalion (id,name,description,status,systemStatus,systemMode,altitude,longitude,latitude,azure) values (1,'Fox Team','fox-team','static','off','auto',0.0,0.0,0.0,false);
+    insert into Battalion (id,name,description,status,systemStatus,systemMode,altitude,longitude,latitude,azure) values (2,'Hauk Team','hauk-team','static','off','auto',0.0,0.0,0.0,false);
+    insert into Battalion (id,name,description,status,systemStatus,systemMode,altitude,longitude,latitude,azure) values (3,'Delta Team','delta-team','static','off','manual',0.0,0.0,0.0,false);
+    insert into Battalion (id,name,description,status,systemStatus,systemMode,altitude,longitude,latitude,azure) values (4,'Mes Team','mes-team','static','off','auto',0.0,0.0,0.0,false);
+    insert into Battalion (id,name,description,status,systemStatus,systemMode,altitude,longitude,latitude,azure) values (5,'Zwarte Team','zwarte-team','static','off','auto',0.0,0.0,0.0,false);
+
+    insert into Member (id,name,rank,email,team_id) values (1,'Col-01','lieutenant colonel','Col-01@mail.com',1);
+    insert into Member (id,name,rank,email,team_id) values (2,'Cap-02','captain','Cap-02@mail.com',1);
+    insert into Member (id,name,rank,email,team_id) values (3,'Cap-03','captain','Cap-03@mail.com',1);
+    insert into Member (id,name,rank,email,team_id) values (4,'Ser-04','sergeant','Ser-04@mail.com',1);
+    insert into Member (id,name,rank,email,team_id) values (5,'Ser-05','sergeant','Ser-05@mail.com',1);
+    insert into Member (id,name,rank,email,team_id) values (6,'Pri-06','private','Pri-06@mail.com',1);
+    insert into Member (id,name,rank,email,team_id) values (7,'Pri-07','private','Pri-07@mail.com',1);
+    insert into Member (id,name,rank,email,team_id) values (8,'Pri-08','private','Pri-08@mail.com',1);
+    insert into Member (id,name,rank,email,team_id) values (9,'Pri-09','private','Pri-09@mail.com',1);
+    insert into Member (id,name,rank,email,team_id) values (10,'Pri-010','private','Pri-010@mail.com',1);
+    insert into Member (id,name,rank,email,team_id) values (11,'Pri-011','private','Pri-011@mail.com',1);
+    insert into Member (id,name,rank,email,team_id) values (12,'Pri-012','private','Pri-012@mail.com',1);
+    insert into Member (id,name,rank,email,team_id) values (13,'Pri-013','private','Pri-013@mail.com',1);
+    insert into Member (id,name,rank,email,team_id) values (14,'Pri-014','private','Pri-014@mail.com',1);
+    insert into Member (id,name,rank,email,team_id) values (15,'Pri-015','private','Pri-015@mail.com',1);
+
+    insert into Member (id,name,rank,email,team_id) values (16,'Col-016','lieutenant colonel','Col-016@mail.com',2);
+    insert into Member (id,name,rank,email,team_id) values (17,'Cap-017','captain','Cap-017@mail.com',2);
+    insert into Member (id,name,rank,email,team_id) values (18,'Cap-018','captain','Cap-018@mail.com',2);
+    insert into Member (id,name,rank,email,team_id) values (19,'Ser-019','sergeant','Ser-019@mail.com',2);
+    insert into Member (id,name,rank,email,team_id) values (20,'Ser-020','sergeant','Ser-020@mail.com',2);
+    insert into Member (id,name,rank,email,team_id) values (21,'Pri-021','private','Pri-021@mail.com',2);
+    insert into Member (id,name,rank,email,team_id) values (22,'Pri-022','private','Pri-022@mail.com',2);
+    insert into Member (id,name,rank,email,team_id) values (23,'Pri-023','private','Pri-023@mail.com',2);
+    insert into Member (id,name,rank,email,team_id) values (24,'Pri-024','private','Pri-024@mail.com',2);
+    insert into Member (id,name,rank,email,team_id) values (25,'Pri-025','private','Pri-025@mail.com',2);
+    insert into Member (id,name,rank,email,team_id) values (26,'Pri-026','private','Pri-026@mail.com',2);
+    insert into Member (id,name,rank,email,team_id) values (27,'Pri-027','private','Pri-027@mail.com',2);
+    insert into Member (id,name,rank,email,team_id) values (28,'Pri-028','private','Pri-028@mail.com',2);
+    insert into Member (id,name,rank,email,team_id) values (29,'Pri-029','private','Pri-029@mail.com',2);
+    insert into Member (id,name,rank,email,team_id) values (30,'Pri-030','private','Pri-030@mail.com',2);
+
+    insert into Member (id,name,rank,email,team_id) values (31,'Col-031','lieutenant colonel','Col-031@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (32,'Cap-032','captain','Cap-032@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (33,'Cap-033','captain','Cap-033@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (34,'Ser-034','sergeant','Ser-034@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (35,'Ser-035','sergeant','Ser-035@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (36,'Ser-036','sergeant','Ser-036@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (37,'Pri-037','private','Pri-037@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (38,'Pri-038','private','Pri-038@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (39,'Pri-039','private','Pri-039@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (40,'Pri-040','private','Pri-040@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (41,'Pri-041','private','Pri-041@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (42,'Pri-042','private','Pri-042@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (43,'Pri-043','private','Pri-043@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (44,'Pri-044','private','Pri-044@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (45,'Pri-045','private','Pri-045@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (46,'Pri-046','private','Pri-046@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (47,'Pri-047','private','Pri-047@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (48,'Pri-048','private','Pri-048@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (49,'Pri-049','private','Pri-049@mail.com',3);
+    insert into Member (id,name,rank,email,team_id) values (50,'Pri-050','private','Pri-050@mail.com',3);
+
+    insert into Member (id,name,rank,email,team_id) values (51,'Col-051','lieutenant colonel','Col-051@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (52,'Cap-052','captain','Cap-052@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (53,'Cap-053','captain','Cap-053@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (54,'Ser-054','sergeant','Ser-054@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (55,'Ser-055','sergeant','Ser-055@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (56,'Ser-056','sergeant','Ser-056@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (57,'Pri-057','private','Pri-057@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (58,'Pri-058','private','Pri-058@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (59,'Pri-059','private','Pri-059@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (60,'Pri-060','private','Pri-060@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (61,'Pri-061','private','Pri-061@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (62,'Pri-062','private','Pri-062@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (63,'Pri-063','private','Pri-063@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (64,'Pri-064','private','Pri-064@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (65,'Pri-065','private','Pri-065@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (66,'Pri-066','private','Pri-066@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (67,'Pri-067','private','Pri-067@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (68,'Pri-068','private','Pri-068@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (69,'Pri-069','private','Pri-069@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (70,'Pri-070','private','Pri-070@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (71,'Pri-071','private','Pri-071@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (72,'Pri-072','private','Pri-072@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (73,'Pri-073','private','Pri-073@mail.com',4);
+    insert into Member (id,name,rank,email,team_id) values (74,'Pri-074','private','Pri-074@mail.com',4);
+
+
+    insert into equipment (id,name,code,type,status,battalion_id) values (1,'F16','F16-NL-01','Fixed-Wing','static',1);
+    insert into equipment (id,name,code,type,status,battalion_id) values (2,'F16','F16-NL-02','Fixed-Wing','static',1);
+    insert into equipment (id,name,code,type,status,battalion_id) values (3,'F16','F16-NL-03','Fixed-Wing','static',1);
+    insert into equipment (id,name,code,type,status,battalion_id) values (4,'F16','F16-NL-04','Fixed-Wing','static',1);
+    insert into equipment (id,name,code,type,status,battalion_id) values (5,'F16','F16-NL-05','Fixed-Wing','static',1);
+    insert into equipment (id,name,code,type,status,battalion_id) values (6,'Apache','Apache-NL-06','Rotary-Wing','static',1);
+    insert into equipment (id,name,code,type,status,battalion_id) values (7,'Apache','Apache-NL-07','Rotary-Wing','static',1);
+    insert into equipment (id,name,code,type,status,battalion_id) values (8,'M1127','M1127-NL-08','Reconnaissance','static',1);
+    insert into equipment (id,name,code,type,status,battalion_id) values (9,'M1127','M1127-NL-09','Reconnaissance','static',1);
+    insert into equipment (id,name,code,type,status,battalion_id) values (10,'M1127','M1127-NL-010','Reconnaissance','static',1);
+    insert into equipment (id,name,code,type,status,battalion_id) values (11,'M1127','M1127-NL-011','Reconnaissance','static',1);
+    insert into equipment (id,name,code,type,status,battalion_id) values (12,'M1127','M1127-NL-012','Reconnaissance','static',1);
+    insert into equipment (id,name,code,type,status,battalion_id) values (13,'M1127','M1127-NL-013','Reconnaissance','static',1);
+    insert into equipment (id,name,code,type,status,battalion_id) values (14,'M1131','M1131-NL-014','Fire-Support','static',1);
+    insert into equipment (id,name,code,type,status,battalion_id) values (15,'M1131','M1131-NL-015','Fire-Support','static',1);
+    insert into equipment (id,name,code,type,status,battalion_id) values (16,'Apache','Apache-NL-016','Rotary-Wing','static',2);
+    insert into equipment (id,name,code,type,status,battalion_id) values (17,'M1127','M1127-NL-017','Reconnaissance','static',2);
+    insert into equipment (id,name,code,type,status,battalion_id) values (18,'M1127','M1127-NL-018','Reconnaissance','static',2);
+    insert into equipment (id,name,code,type,status,battalion_id) values (19,'M1127','M1127-NL-019','Reconnaissance','static',2);
+    insert into equipment (id,name,code,type,status,battalion_id) values (20,'M1127','M1127-NL-020','Reconnaissance','static',2);
+    insert into equipment (id,name,code,type,status,battalion_id) values (21,'M1131','M1131-NL-021','Fire-Support','static',2);
+    insert into equipment (id,name,code,type,status,battalion_id) values (22,'M1131','M1131-NL-022','Fire-Support','static',2);
+    insert into equipment (id,name,code,type,status,battalion_id) values (23,'F35','F35-NL-023','Fixed-Wing','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (24,'F35','F35-NL-024','Fixed-Wing','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (25,'F35','F35-NL-025','Fixed-Wing','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (26,'F35','F35-NL-026','Fixed-Wing','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (27,'F35','F35-NL-027','Fixed-Wing','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (28,'F35','F35-NL-028','Fixed-Wing','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (29,'Apache','Apache-NL-029','Rotary-Wing','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (30,'Apache','Apache-NL-030','Rotary-Wing','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (31,'M1127','M1127-NL-031','Reconnaissance','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (32,'M1127','M1127-NL-032','Reconnaissance','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (33,'M1127','M1127-NL-033','Reconnaissance','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (34,'M1127','M1127-NL-034','Reconnaissance','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (35,'M1127','M1127-NL-035','Reconnaissance','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (36,'M1127','M1127-NL-036','Reconnaissance','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (37,'M1127','M1127-NL-037','Reconnaissance','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (38,'M1127','M1127-NL-038','Reconnaissance','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (39,'M1131','M1131-NL-039','Fire-Support','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (40,'M1131','M1131-NL-040','Fire-Support','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (41,'M1131','M1131-NL-041','Fire-Support','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (42,'M1131','M1131-NL-042','Fire-Support','static',3);
+    insert into equipment (id,name,code,type,status,battalion_id) values (43,'M1127','M1127-NL-043','Reconnaissance','static',4);
+    insert into equipment (id,name,code,type,status,battalion_id) values (44,'M1127','M1127-NL-044','Reconnaissance','static',4);
+    insert into equipment (id,name,code,type,status,battalion_id) values (45,'M1127','M1127-NL-045','Reconnaissance','static',4);
+    insert into equipment (id,name,code,type,status,battalion_id) values (46,'M1127','M1127-NL-046','Reconnaissance','static',4);
+    insert into equipment (id,name,code,type,status,battalion_id) values (47,'M1131','M1131-NL-047','Fire-Support','static',4);
+    insert into equipment (id,name,code,type,status,battalion_id) values (48,'M1131','M1131-NL-048','Fire-Support','static',4);
+    insert into equipment (id,name,code,type,status,battalion_id) values (49,'M1131','M1131-NL-049','Fire-Support','static',4);
+    insert into equipment (id,name,code,type,status,battalion_id) values (50,'M1131','M1131-NL-050','Fire-Support','static',4);
