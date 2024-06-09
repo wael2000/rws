@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DORA (Digital Operational Resilience Act)</title>
+    <!-- ================= Favicon ================== -->
+    <!-- Standard -->
+    <link rel="shortcut icon" href="http://placehold.it/64.png/000/fff">
+    <!-- Retina iPad Touch Icon-->
+    <link rel="apple-touch-icon" sizes="144x144" href="http://placehold.it/144.png/000/fff">
+    <!-- Retina iPhone Touch Icon-->
+    <link rel="apple-touch-icon" sizes="114x114" href="http://placehold.it/114.png/000/fff">
+    <!-- Standard iPad Touch Icon-->
+    <link rel="apple-touch-icon" sizes="72x72" href="http://placehold.it/72.png/000/fff">
+    <!-- Standard iPhone Touch Icon-->
+    <link rel="apple-touch-icon" sizes="57x57" href="http://placehold.it/57.png/000/fff">
+    <!-- Styles -->
+    <link href="assets/css/lib/calendar2/pignose.calendar.min.css" rel="stylesheet">
+    <link href="assets/css/lib/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/lib/themify-icons.css" rel="stylesheet">
+    <link href="assets/css/lib/owl.carousel.min.css" rel="stylesheet" />
+    <link href="assets/css/lib/owl.theme.default.min.css" rel="stylesheet" />
+    <link href="assets/css/lib/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/lib/helper.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+
+
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css' rel='stylesheet' />
+</head>
+
+<body ng-app="DoraManagement" ng-controller="DoraManagementController">
+    <div class="content-wrap">
+        <div class="container-fluid">
+            <div class="row header">
+                <div class="col-lg-6">
+                    <img class="pull-left m-r-10 logo-img" src="img/redhat.png" alt="" />
+                    <h5 class="pull-left ">Digital Operational Resilience Act (DORA)</h5> <br/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- main lots -->
+    <div class="content-wrap">
+        <div class="main">
+            <div class="container-fluid">
+  
+                <!-- # row  Search -->
+                <div class="row">
+                    <div class="col-lg-12 p-r-0 title-margin-right">
+                        <div class="page-header">
+                            <div class="page-title">
+                                    
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- /# row search -->
+                <section id="main-content">
+
+                    <!-- start table -->
+                    <div class="row" ng-if="view=='table'">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="bootstrap-data-table-panel">
+                                    <div class="table-responsive">
+                                       
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end of table -->
+
+                    <!-- # row Battalion grid -->
+                    <div class="row" class="grid" ng-if="view=='grid'"> 
+                        <div class="col-lg-3 col-md-3 col-sm-3" ng-repeat="battalion in battalions | orderBy:'-id'" on-finish-render="callRenderFinished()" on-start-render="callRenderStarted()">
+                            <div class="card">
+
+                                <span class="float-md-right" ng-switch="(battalion.status)">
+                                    <div ng-switch-when="deprived">
+                                        <i class="deploy float-md-right" ng-click="deploy(this)" battalion="{{ battalion }}">
+                                            Provision
+                                        </i>
+                                    </div>
+                                    <div ng-switch-when="deployed">
+                                        <i class="mobile float-md-right" ng-click="mobile(this)" battalion="{{ battalion }}">
+                                            Provisioned
+                                        </i>
+                                    </div>
+                                </span>
+                                
+                                <div class="card-title"> {{ battalion.name }} </div>
+                                <div class="card-subtitle"> {{ battalion.description }}
+                                    <span class="float-md-right"> {{ battalion.applications.length }} system[s] </span>
+                                </div>
+                                <div class="card-content">
+                                    
+                                    <table  ng-repeat="application in battalion.applications">
+                                        <tr>
+                                            <td>
+                                                <span ng-if="(!application.deployed)" class="enable" ng-click="startSystem(this)" battalion="{{ battalion }}">
+                                                Deploy 
+                                                </span>
+                                                <span ng-if="(application.deployed)" class="enabled"  battalion="{{ battalion }}">
+                                                deployed 
+                                                </span>
+                                            </td>
+                                            <td align="left">
+                                                {{  application.description  }} 
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- /# row Battalion grid  -->
+
+                </section>
+            </div>
+            <!-- # row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="footer">
+                        <p>2024 © Red Hat EMEA. - <a href="#">www.redhat.com</a></p>
+                    </div>
+                </div>
+            </div>
+            <!-- /# row -->
+        
+            </div>
+        </div>
+    </div>
+
+
+
+     <!-- Modal Azure  -->
+    <div class="modal fade none-border" id="azure-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">
+            <strong>Battalion </strong>
+            <code>( {{currentBattalion.description}} )</code>
+            </h4>
+        </div>
+        <div class="modal-body">
+            <form>
+            <div class="row">
+                <div class="col-lg-12">
+                <div>
+                    <div class="card-content">
+                        <span class="panel card-title"> You are about to provision
+                             Azure Postgresql native Service!</span>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <input type="hidden" id="lot-id">
+            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Canel</button>
+            <button type="button" class="btn btn-danger waves-effect waves-light save-category" data-dismiss="modal" ng-click="azureprovision()">Proceed</button>
+        </div>
+        </div>
+    </div>
+    </div>
+    <!-- end Modal Azure  -->
+
+
+    <!-- Modal Map  -->
+    <div class="modal fade none-border" id="mymap">
+    <div class="modal-dialog" >
+        <div class="modal-content" style="height:600px; width:800px">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12">
+                <div id="map" style="top: 0; bottom: 0; width: 100%; height:500px"></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+    </div>
+    <!-- end Modal MAp  -->
+
+    <!-- Modal Release Battalion -->
+    <div class="modal fade none-border" id="system-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">
+            <strong>Battalion </strong>
+            <code>( {{currentBattalion.description}} )</code>
+            </h4>
+        </div>
+        <div class="modal-body">
+            <form>
+            <div class="row">
+                <div class="col-lg-12">
+                <div>
+                    <h2><span id="lot-name"></span></h4>
+                    <div class="card-content">
+                        <h5><i class="fa fa-check text-info"></i> You have {{systems.length}} pod[s] running!</h5>
+                        <div class="pod">
+                            {{systems.length}}
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <input type="hidden" id="lot-id">
+            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger waves-effect waves-light save-category" data-dismiss="modal">Remove</button>
+        </div>
+        </div>
+    </div>
+    </div>
+    <!-- end Modal Release Battalion -->
+
+    <!-- jquery vendor -->
+    <script src="assets/js/lib/jquery.min.js"></script>
+    <script src="assets/js/lib/jquery.nanoscroller.min.js"></script>
+    <!-- nano scroller -->
+    
+    <script src="assets/js/lib/bootstrap.min.js"></script>
+    <script src="assets/js/scripts.js"></script>
+    <!-- bootstrap -->
+
+    <script src="assets/js/lib/calendar-2/moment.latest.min.js"></script>
+    <script src="assets/js/lib/calendar-2/pignose.calendar.min.js"></script>
+    <script src="assets/js/lib/calendar-2/pignose.init.js"></script>
+
+
+    <script src="assets/js/lib/owl-carousel/owl.carousel.min.js"></script>
+    <script src="assets/js/lib/owl-carousel/owl.carousel-init.js"></script>
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css"/>
+    <link rel="stylesheet" href="css/amsify.select.css"/>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    
+    <script type="text/javascript"> 
+        var distance;
+        var app = angular.module("DoraManagement", []);
+
+        app.directive('onFinishRender', ['$timeout', '$parse', function ($timeout, $parse) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attr) {
+                if (scope.$last === true) {
+                    $timeout(function () {
+                        scope.$emit('ngRepeatFinished');
+                        if ( !! attr.onFinishRender) {
+                            $parse(attr.onFinishRender)(scope);
+                        }
+                    });
+                }
+                if (!!attr.onStartRender) {
+                    if (scope.$first === true) {
+                        $timeout(function () {
+                            scope.$emit('ngRepeatStarted');
+                            if ( !! attr.onStartRender) {
+                                $parse(attr.onStartRender)(scope);
+                            }
+                        });
+                    }
+                }
+            }
+        }
+        }]);
+
+        app.controller("DoraManagementController", function ($scope, $http) {
+            $scope.webSocket = true;
+            $scope.battalions = [];
+            $scope.systems = [];
+            $scope.currentBattalion;
+            $scope.view = "grid";
+            _refreshPageData();
+            function _refreshPageData() {
+                var method = "GET";
+                var url = 'http://{composite}/department';
+                var data = {};
+                $http({
+                    method: method,
+                    url: url,
+                    data: angular.toJson(data),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin' : '*'
+                    }
+                }).then(function successCallback(response) {
+                    $scope.battalions = response.data;
+                    /*
+                    if($scope.webSocket) {
+                        $scope.battalions.forEach((battalion) => {
+                                connectToSystems(battalion.id);
+                            });
+                        $scope.webSocket = false;
+                    }
+                    */
+                }, function errorCallback(response) {
+                    console.log(response.statusText);
+                });
+            } 
+
+            $scope.callRenderFinished = function () {
+                //console.log('Method called by the directive, when finished rendering');
+                if($scope.currentBattalion)
+                    $("#div-loading-"+$scope.currentBattalion.id).show();
+            }
+            $scope.callRenderStarted = function () {
+                //console.log('Method2 called by the directive, when starting rendering');
+            }
+            $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent) {
+                //console.log('Event captured in the controller, when finished rendering');
+            });
+            $scope.$on('ngRepeatStarted', function (ngRepeatStartedEvent) {
+                //console.log('Event captured in the controller, when started rendering');
+            });
+
+            $scope.azure = function(battalion){
+                $scope.currentBattalion = battalion.battalion;
+                $('#azure-modal').modal('show');
+            }
+
+            $scope.showmap = function(battalion){
+                $scope.currentBattalion = battalion.battalion;
+                $('#mymap').modal('show');
+            }
+            
+            $scope.azureprovision = function(){
+                var method = "POST";
+                var url = 'http://{composite}/battalion/azure';
+                var data = {  "battalion" : $scope.currentBattalion.description, "action" : "deploy" } ;
+                $("#success-alert-" + $scope.currentBattalion.id).show();
+                $http({
+                    method: method,
+                    url: url,
+                    data: angular.toJson(data),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin' : '*'
+                    }
+                }).then(function successCallback(response) {
+                    $("#success-alert-" + $scope.currentBattalion.id).fadeTo(2000, 500).slideUp(500, function(){
+                        $("#success-alert-" + $scope.currentBattalion.id).slideUp(500);
+                    });
+                }, function errorCallback(response) {
+            
+                });
+            }
+
+            $scope.systemDetails = function(battalion){
+                //$('#system-modal').modal('show');
+                //return;
+                var method = "GET";
+                $scope.currentBattalion = battalion.battalion;
+                var url = 'https://api.cluster-gg776.gg776.sandbox2839.opentlc.com:6443/api/v1/namespaces/battalion-' + battalion.battalion.description + '/pods?limit=500';
+                $http({
+                    method: method,
+                    url: url,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization' : 'Bearer sha256~a1WtQClDuWE08xuHAurjVzyJz8RvfYrGg5zGu5OGgKI'
+                    }
+                }).then(function successCallback(response) {
+                   console.log(response.data);
+                   $scope.systems = response.data.items;
+                   $('#system-modal').modal('show');
+                }, function errorCallback(response) {
+            
+                });
+            }
+
+            $scope.deploy = function(battalion){
+                var method = "POST";
+                var url = 'http://{composite}/battalion/status';
+                if(battalion.battalion.systemMode=='auto')
+                    $scope.currentBattalion = battalion.battalion;
+                else 
+                    $scope.currentBattalion = null;
+                var data = {  "id" : battalion.battalion.id, "status" : "deployed" } ;
+                $("#success-alert-" + battalion.battalion.id).show();
+                $http({
+                    method: method,
+                    url: url,
+                    data: angular.toJson(data),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin' : '*'
+                    }
+                }).then(function successCallback(response) {
+                    $("#success-alert-" + battalion.battalion.id).fadeTo(2000, 500).slideUp(500, function(){
+                        $("#success-alert-" + battalion.battalion.id).slideUp(500);
+                    });
+                    _refreshPageData();
+                }, function errorCallback(response) {
+            
+                });
+            }
+
+            $scope.startSystem = function(equipment){                
+                var method = "POST";
+                var url = 'http://{composite}/battalion/equipment';
+                $scope.currentBattalion = equipment.battalion;
+                var data = {  "battalion" : equipment.battalion.id, "equipment" : equipment.key, "status" : "deployed" } ;
+                $("#success-alert-" + equipment.battalion.id).show();
+                $http({
+                    method: method,
+                    url: url,
+                    data: angular.toJson(data),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin' : '*'
+                    }
+                }).then(function successCallback(response) {
+                    $("#success-alert-" + equipment.battalion.id).fadeTo(2000, 500).slideUp(500, function(){
+                        $("#success-alert-" + equipment.battalion.id).slideUp(500);
+                    });
+                    _refreshPageData();
+                }, function errorCallback(response) {
+                
+                });
+            }
+
+            $scope.removeSystems = function(battalion){
+                var method = "POST";
+                var url = 'http://{composite}/battalion/remove';
+                $scope.currentBattalion = battalion.battalion;
+                var data = {  "id" : battalion.battalion.id , "systemStatus" : "off"} ;
+                $("#success-alert-" + battalion.battalion.id).show();
+                $http({
+                method: method,
+                url: url,
+                data: angular.toJson(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin' : '*'
+                }
+                }).then(function successCallback(response) {
+                    $("#success-alert-" + battalion.battalion.id).fadeTo(2000, 500).slideUp(500, function(){
+                        $("#success-alert-" + battalion.battalion.id).slideUp(500);
+                    });
+                    _refreshPageData();
+                }, function errorCallback(response) {
+                
+                });
+            }
+
+            $scope.mobile = function(battalion){
+                var method = "POST";
+                var url = 'http://{composite}/battalion/status';
+                var data = {  "id" : battalion.battalion.id, "status" : "mobile" } ;
+                $("#success-alert-" + battalion.battalion.id).show();
+                $http({
+                method: method,
+                url: url,
+                data: angular.toJson(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin' : '*'
+                }
+                }).then(function successCallback(response) {
+                    $("#success-alert-" + battalion.battalion.id).fadeTo(2000, 500).slideUp(500, function(){
+                        $("#success-alert-" + battalion.battalion.id).slideUp(500);
+                    });
+
+                    _refreshPageData();
+                }, function errorCallback(response) {
+                
+                });
+            }
+
+            $scope.dismount = function(battalion){
+                var method = "POST";
+                var url = 'http://{composite}/battalion/status';
+                var data = {  "id" : battalion.battalion.id, "status" : "dismounted" } ;
+                $("#success-alert-" + battalion.battalion.id).show();
+                $http({
+                method: method,
+                url: url,
+                data: angular.toJson(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin' : '*'
+                }
+                }).then(function successCallback(response) {
+                    $("#success-alert-" + battalion.battalion.id).fadeTo(2000, 500).slideUp(500, function(){
+                        $("#success-alert-" + battalion.battalion.id).slideUp(500);
+                    });
+
+                    _refreshPageData();
+                }, function errorCallback(response) {
+                
+                });
+            }
+
+            $scope.build = function(battalion){
+                var method = "POST";
+                var url = 'http://{composite}/battalion/build';
+                $scope.currentBattalion = battalion.battalion;
+                var data = {  "id" : battalion.battalion.id  } ;
+                console.log(data);
+                $("#build-alert-" + battalion.battalion.id).show();
+                $http({
+                    method: method,
+                    url: url,
+                    data: angular.toJson(data),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin' : '*'
+                    }
+                }).then(function successCallback(response) {
+                    $("#build-alert-" + battalion.battalion.id).fadeTo(2000, 500).slideUp(500, function(){
+                            $("#build-alert-" + battalion.battalion.id).slideUp(500);
+                    });
+                }, function errorCallback(response) {
+                
+                });
+            }
+
+            $scope.isMember = function(lot){
+            if(lot.team) {
+                for(index in lot.team.members){
+                    var member = lot.team.members[index];
+                    if(member.email=="{email}")
+                        return true;
+                }
+            } else 
+                return false;
+            }
+  
+            function connectToSystems(battalion) {
+                socket = new WebSocket("ws://{composite}/notify/" + battalion);
+                socket.onopen = function() {
+                    console.log("Connected to the web socket");
+                    //if($scope.currentBattalion && $scope.currentBattalion.id == battalion)
+                    //$("#div-loading-"+battalion).show();
+                };
+                socket.onmessage =function(m) {
+                    console.log("Got message: " + m.data);
+                    if(m.data=='ping')
+                        return;
+                    const tokens = m.data.split(',');
+                    if(tokens[0]=="b" || tokens[0]=="e") {
+                        $scope.battalions.forEach((battalion) => {
+                            if(battalion.id==tokens[1])
+                                battalion.systemStatus=tokens[1];
+                        });
+                        $("#div-b-"+tokens[1]).attr('class', 'card-' + tokens[1]);
+                        $("#div-s-"+tokens[1]).text(tokens[1]);
+                        $("#td-b-"+tokens[1]).attr('class', 'card-' + tokens[1]);
+                        $("#td-s-"+tokens[1]).text(tokens[1]);
+                        $("#div-loading-"+tokens[1]).hide();
+                        
+                        _refreshPageData();
+                        $scope.currentBattalion = null;
+                    } else if(tokens[0]=="l" ){
+                        var lonlat = {"lon": tokens[2], "lat": tokens[3]};
+                        const markerLocation = [ tokens[2],  tokens[3] ]; // Marker coordinates [lng, lat]
+                        //marker.setLngLat(markerLocation);
+                        //map.setCenter(markerLocation);
+                        var marker1 = new mapboxgl.Marker().setLngLat(markerLocation).addTo(map);
+                        addNewLocation(markerLocation);
+                        
+                    }
+
+                };
+            }   
+
+
+        });
+        
+      </script>
+   
+
+   
+    
+    <script type="text/javascript"> 
+    var marker;
+    var map;
+    var source;
+    coordinates = [];
+
+    function addNewLocation(updatedCoordinates){
+        coordinates.push(updatedCoordinates)
+        // Add a line layer to render the line
+        map.getSource('line').setData({
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': coordinates
+                    }
+                });
+        //marker.setLngLat(updatedCoordinates);
+    }
+
+
+    $( document ).ready(function() {
+        var latitude=51.7098069 , longitude=5.364971961, raduis=10; //KM
+        var initialCoordinates = [longitude, latitude];
+        coordinates.push(initialCoordinates);
+        mapboxgl.accessToken = 'pk.eyJ1Ijoid2FlbGVsZG9hbWlyeSIsImEiOiJjbHdxbm42MnQwNGJqMmpzYXQzMmlyNGc4In0.RhndpXBdgA_zrlyGOyGuLg';
+        map = new mapboxgl.Map({
+            container: 'map', // container ID
+            center: initialCoordinates, // starting position [lng, lat]
+            zoom: 12 // starting zoom
+        });
+        setTimeout(function() {
+             //map.resize();
+             //$('.modal-content').css('height', '505px');
+        }, 2000);
+        map.on('idle',function(){
+            //$('.mapboxgl-canvas').css('width', '100%');
+            //$('.mapboxgl-canvas').css('height', '500px');
+            //map.resize();
+        });
+        map.on('load', function() {
+            // Create a new marker.
+            //map.resize();
+            marker = new mapboxgl.Marker()
+                .setLngLat(initialCoordinates)
+                    .addTo(map);
+
+            source = map.addSource('line', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': coordinates
+                    }
+                }
+            });
+            map.addLayer({
+                'id': 'lineLayer',
+                'type': 'line',
+                'source': 'line',
+                'layout': {},
+                'paint': {
+                    'line-color': '#000',
+                    'line-width': 3
+                }
+            });
+
+        });
+     
+    }); 
+    </script>
+
+    
+</body>
+</html>
