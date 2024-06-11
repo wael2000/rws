@@ -22,6 +22,7 @@ spec:
         - repositoryType: git
           repoURL: https://github.com/wael2000/dora
           targetRevision: main
+          path: gitops/provisioning/ns
       destination:
         namespace: NAMESPACE
         server: "{{server}}"
