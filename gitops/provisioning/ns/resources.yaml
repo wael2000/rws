@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: rq
+spec:
+  hard:
+    pods: '10'
+    requests.cpu: '2'
+    requests.memory: 2Gi
+    limits.cpu: '4'
+    limits.memory: 8Gi
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: mem-limit-range
+spec:
+  limits:
+    - default:
+        memory: 1024Mi
+      defaultRequest:
+        memory: 256Mi
+      type: Container

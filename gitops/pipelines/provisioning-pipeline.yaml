@@ -1,0 +1,103 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: provisioning-pipeline
+  namespace: hub-ns
+spec:
+  params:
+    - default: provision
+      name: action
+      type: string
+    - name: department
+      description: ''
+      default: pss
+    - name: location
+      description: ''
+      default: dc
+    - name: type
+      description: ''
+      default: ns
+  workspaces:
+    - name: source
+      optional: false
+  tasks:
+    - name: git-clone
+      params:
+        - name: url
+          value: 'https://github.com/wael2000/dora'
+        - name: revision
+          value: main
+        - name: refspec
+          value: ''
+        - name: submodules
+          value: 'true'
+        - name: depth
+          value: '1'
+        - name: sslVerify
+          value: 'true'
+        - name: crtFileName
+          value: ca-bundle.crt
+        - name: subdirectory
+          value: ''
+        - name: sparseCheckoutDirectories
+          value: ''
+        - name: deleteExisting
+          value: 'true'
+        - name: httpProxy
+          value: ''
+        - name: httpsProxy
+          value: ''
+        - name: noProxy
+          value: ''
+        - name: verbose
+          value: 'true'
+        - name: gitInitImage
+          value: >-
+            registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:868966ef9d4b54952d8a74eb83bba40eb1f52c0148994fa704efd0e3797c61c5
+        - name: userHome
+          value: /home/git
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: source
+    - name: provision
+      params:
+        - name: SCRIPT
+          value: oc create -f gitops/applicationset.yaml
+        - name: VERSION
+          value: latest
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: ClusterTask
+        name: openshift-client
+      when:
+        - input: $(params.action)
+          operator: in
+          values:
+            - provision
+      workspaces:
+        - name: manifest-dir
+          workspace: source
+    - name: destory
+      params:
+        - name: SCRIPT
+          value: oc delete -f gitops/applicationset.yaml
+        - name: VERSION
+          value: latest
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: ClusterTask
+        name: openshift-client
+      when:
+        - input: $(params.action)
+          operator: in
+          values:
+            - remove
+      workspaces:
+        - name: manifest-dir
+          workspace: source
+  finally: []

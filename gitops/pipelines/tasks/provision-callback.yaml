@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: provision-callback
+spec:
+  description: Send Provisioning callback
+  params:
+    - default: 'pss'
+      description: department
+      name: department
+      type: string
+    - name: notification_url
+      type: string
+      default: "http://mc-mc-datacenter.apps.cluster-gg776.gg776.sandbox2839.opentlc.com/battalion/system"
+  workspaces:
+    - name: workspace
+  steps:
+    - name: configure
+      image: registry.access.redhat.com/ubi8/ubi-minimal
+      script: |
+        #!/usr/bin/env bash
+
+        curl -XPOST -d '{"description": "$(params.battalion)", "systemStatus" : "on"}' $(params.notification_url) -H 'Content-Type: application/json'

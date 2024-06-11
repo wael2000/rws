@@ -24,6 +24,10 @@ import java.util.HashMap;
 public class Department extends PanacheEntity {
     public static String PROVISIONED = "provisioned";
     public static String DEPRIVED = "deprived";
+
+    public static String NAMESPACE = "ns";
+    public static String CLUSTER = "cluster";
+    public static String NODES = "odes";
     
     private String name;
     private String description;
@@ -63,7 +67,7 @@ public class Department extends PanacheEntity {
         this.tenantType = tenantType;
     }
     
-    public Boolean getDc() {
+    public Boolean isDc() {
         return dc;
     }
 
@@ -71,7 +75,7 @@ public class Department extends PanacheEntity {
         this.dc = dc;
     }
 
-    public Boolean getAws() {
+    public Boolean isAws() {
         return aws;
     }
 
