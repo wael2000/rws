@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: provision-callback
+  name: provisioning-callback
 spec:
   description: Send Provisioning callback
   params:
@@ -9,7 +9,7 @@ spec:
       description: department
       name: department
       type: string
-    - name: notification_url
+    - name: callback_url
       type: string
       default: "http://mc-mc-datacenter.apps.cluster-gg776.gg776.sandbox2839.opentlc.com/battalion/system"
   workspaces:
@@ -20,4 +20,4 @@ spec:
       script: |
         #!/usr/bin/env bash
 
-        curl -XPOST -d '{"description": "$(params.battalion)", "systemStatus" : "on"}' $(params.notification_url) -H 'Content-Type: application/json'
+        curl -XPOST -d '{"name": "$(params.department)"}' $(params.callback_url) -H 'Content-Type: application/json'

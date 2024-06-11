@@ -2,24 +2,23 @@ apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
   name: provisioning-pipeline
-  namespace: hub-ns
 spec:
   params:
-    - default: provision
+    - default: create
+      description: create or delete
       name: action
       type: string
-    - name: department
-      description: ''
-      default: pss
-    - name: location
-      description: ''
-      default: dc
-    - name: type
-      description: ''
-      default: ns
-  workspaces:
-    - name: source
-      optional: false
+    - default: pss
+      name: department
+      type: string
+    - default: dc
+      name: location
+      type: string
+    - default: ns
+      name: type
+      type: string
+    - name: callback_url
+      type: string
   tasks:
     - name: git-clone
       params:
@@ -52,8 +51,7 @@ spec:
         - name: verbose
           value: 'true'
         - name: gitInitImage
-          value: >-
-            registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:868966ef9d4b54952d8a74eb83bba40eb1f52c0148994fa704efd0e3797c61c5
+          value: 'registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:868966ef9d4b54952d8a74eb83bba40eb1f52c0148994fa704efd0e3797c61c5'
         - name: userHome
           value: /home/git
       taskRef:
@@ -62,10 +60,10 @@ spec:
       workspaces:
         - name: output
           workspace: source
-    - name: provision
+    - name: ns
       params:
         - name: SCRIPT
-          value: oc create -f gitops/applicationset.yaml
+          value: sed -e 's/NAMESPACE/$(params.department)/g' gitops/provisioning/ns.yaml | oc $(params.action) -f - -n openshift-gitops
         - name: VERSION
           value: latest
       runAfter:
@@ -74,17 +72,17 @@ spec:
         kind: ClusterTask
         name: openshift-client
       when:
-        - input: $(params.action)
+        - input: $(params.type)
           operator: in
           values:
-            - provision
+            - ns
       workspaces:
         - name: manifest-dir
           workspace: source
-    - name: destory
+    - name: cluster
       params:
         - name: SCRIPT
-          value: oc delete -f gitops/applicationset.yaml
+          value: oc help
         - name: VERSION
           value: latest
       runAfter:
@@ -93,11 +91,47 @@ spec:
         kind: ClusterTask
         name: openshift-client
       when:
-        - input: $(params.action)
+        - input: $(params.type)
           operator: in
           values:
-            - remove
+            - cluster
       workspaces:
-        - name: manifest-dir
+        - name: kubeconfig-dir
           workspace: source
-  finally: []
+    - name: nodes
+      params:
+        - name: SCRIPT
+          value: oc help
+        - name: VERSION
+          value: latest
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: ClusterTask
+        name: openshift-client
+      when:
+        - input: $(params.type)
+          operator: in
+          values:
+            - nodes
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: source
+    - name: callback
+      params:
+        - name: department
+          value: $(params.department)
+        - name: callback_url
+          value: $(params.callback_url)
+      runAfter:
+        - ns
+        - cluster
+        - nodes
+      taskRef:
+        kind: Task
+        name: provisioning-callback
+      workspaces:
+        - name: workspace
+          workspace: source
+  workspaces:
+    - name: source

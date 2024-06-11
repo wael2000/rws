@@ -118,4 +118,8 @@ public class Department extends PanacheEntity {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public static Department findByName(String name){
+        return find("name", name).firstResult();
+    }
 }

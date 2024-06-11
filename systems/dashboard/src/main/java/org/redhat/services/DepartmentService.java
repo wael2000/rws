@@ -63,7 +63,7 @@ public class DepartmentService {
      */
     @Transactional 
     public Department provision(Department department){
-        Department dep = Department.findById(department.id);
+        Department dep = Department.findByName(department.getName());
         dep.setStatus(Department.PROVISIONED);
         dep.setDc(true);
         em.persist(dep);
