@@ -1,0 +1,2 @@
+gitops/provisioning/cluster/install-config.yaml
+gitops/provisioning/cluster/cluster-secrets.yaml

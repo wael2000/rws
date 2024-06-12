@@ -150,14 +150,14 @@
 
                     <section class="card absolute" ng-if="department.id==object.id">
                         <div class="card-content department">
-                        <div class="twt-feed blue-bg">
+                        <div class="aler aler-danger">
                             <div class="corner-ribon black-ribon">
                                 <i class="fa fa-close"></i>
                             </div>
 
-                            <div ng-if="department.id==object.id" class="">
+                            <div ng-if="department.id==object.id">
                                 <div class="lds-ripple">
-                                <div></div>
+                                    <div></div>
                                 </div>
                                 <p class="text-light">Provisioning has started!</p>
                             </div>
@@ -294,7 +294,7 @@
 
             $scope.scale = function(department,scaler){
                 var method = "POST";
-                var url = 'http://{composite}/department/scale/trigger';
+                var url = 'http://{composite}/department/scale/commit';
                 department.provider = scaler;
                 //var data = {"department": department,"scaler":scaler};
                 $http({

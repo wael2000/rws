@@ -10,9 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.CascadeType;
 import java.util.Set;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import java.util.Map;
-import java.lang.reflect.Member;
-import java.util.HashMap;
+
 
 @Entity
 @Table(name="Department")

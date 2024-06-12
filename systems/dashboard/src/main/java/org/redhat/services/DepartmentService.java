@@ -61,7 +61,7 @@ public class DepartmentService {
      * default provisioning on DC
      * @param department
      */
-    @Transactional 
+    @Transactional
     public Department provision(Department department){
         Department dep = Department.findByName(department.getName());
         dep.setStatus(Department.PROVISIONED);

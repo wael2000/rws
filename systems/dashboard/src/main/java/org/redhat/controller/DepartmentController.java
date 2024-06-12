@@ -80,12 +80,11 @@ public class DepartmentController {
     @Produces(MediaType.APPLICATION_JSON)
     public void provisionTrigger(Department department) {
         if(pipelineEnabled){
-            Department dep = service.provision(department);
             Map<String,String> payload = new HashMap<>();
             payload.put("department",department.getName());
             payload.put("action","provision");
             payload.put("location","dc");
-            payload.put("type",dep.getTenantType());
+            payload.put("type",department.getTenantType());
             pipelineProxyService.deploy(payload);
         }
     }
@@ -116,8 +115,9 @@ public class DepartmentController {
         if(pipelineEnabled){
             Map<String,String> payload = new HashMap<>();
             payload.put("department",department.getName());
-            payload.put("action","deploy");
-            payload.put("location","dc");
+            payload.put("action","provision");
+            payload.put("location",department.getProvider());
+            payload.put("type",department.getTenantType());
             pipelineProxyService.deploy(payload);
         }
     }
@@ -132,8 +132,7 @@ public class DepartmentController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)  
     public Department scale(Department department) { 
-        Department dep = service.scale(department);
-        return dep;
+        return service.scale(department);
     }
 
 
