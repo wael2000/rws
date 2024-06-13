@@ -147,24 +147,20 @@
                         </li>
                     </ul>
 
-
-                    <section class="card absolute" ng-if="department.id==object.id">
+                    <section class="alert alert-danger card absolute" ng-if="department.id==object.id">
                         <div class="card-content department">
-                        <div class="aler aler-danger">
+                        <div class="">
                             <div class="corner-ribon black-ribon">
                                 <i class="fa fa-close"></i>
                             </div>
-
                             <div ng-if="department.id==object.id">
                                 <div class="lds-ripple">
                                     <div></div>
                                 </div>
-                                <p class="text-light">Provisioning has started!</p>
                             </div>
                         </div>
                         </div>
                     </section>
-                    
 
                 </div>
                 <div class="footer">

@@ -17,7 +17,8 @@ spec:
     - default: ns
       name: type
       type: string
-    - name: callback_url
+    - default: 'http://127.0.0.1.nip.io:8090/department/provision/commit'
+      name: callback_url
       type: string
   tasks:
     - name: git-clone
@@ -51,7 +52,8 @@ spec:
         - name: verbose
           value: 'true'
         - name: gitInitImage
-          value: 'registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:868966ef9d4b54952d8a74eb83bba40eb1f52c0148994fa704efd0e3797c61c5'
+          value: >-
+            registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:868966ef9d4b54952d8a74eb83bba40eb1f52c0148994fa704efd0e3797c61c5
         - name: userHome
           value: /home/git
       taskRef:
@@ -63,7 +65,10 @@ spec:
     - name: ns
       params:
         - name: SCRIPT
-          value: sed -e 's/NAMESPACE/$(params.department)/g' gitops/provisioning/ns.yaml | oc $(params.action) -f - -n openshift-gitops
+          value: >-
+            sed -e 's/NAMESPACE/$(params.department)/g'
+            gitops/provisioning/ns.yaml | oc $(params.action) -f - -n
+            openshift-gitops
         - name: VERSION
           value: latest
       runAfter:
@@ -79,10 +84,10 @@ spec:
       workspaces:
         - name: manifest-dir
           workspace: source
-    - name: cluster
+    - name: namespace
       params:
         - name: SCRIPT
-          value: oc help
+          value: oc new-project $(params.department)-cluster
         - name: VERSION
           value: latest
       runAfter:
@@ -125,13 +130,59 @@ spec:
           value: $(params.callback_url)
       runAfter:
         - ns
-        - cluster
         - nodes
+        - cluster
       taskRef:
         kind: Task
         name: provisioning-callback
       workspaces:
         - name: workspace
           workspace: source
+    - name: secrets
+      params:
+        - name: SCRIPT
+          value: >-
+            oc get secret cluster-secrets -n hub-ns -o
+            jsonpath='{.data.secrets}' | base64 --decode | sed -e
+            's/NAMESPACE/$(params.department)/g' | oc create -f - -n
+            $(params.department)-cluster
+        - name: VERSION
+          value: latest
+      runAfter:
+        - namespace
+      taskRef:
+        kind: ClusterTask
+        name: openshift-client
+    - name: cluster
+      params:
+        - name: SCRIPT
+          value: >-
+            oc get secret cluster-secrets -n hub-ns -o
+            jsonpath='{.data.cluster}' | base64 --decode | sed -e
+            's/NAMESPACE/$(params.department)/g' | oc create -f - -n
+            $(params.department)-cluster
+        - name: VERSION
+          value: latest
+      runAfter:
+        - cluster-set
+      taskRef:
+        kind: ClusterTask
+        name: openshift-client
+    - name: cluster-set
+      params:
+        - name: SCRIPT
+          value: >-
+            oc get secret cluster-secrets -n hub-ns -o
+            jsonpath='{.data.cluster-set}' | base64 --decode | sed -e
+            's/NAMESPACE/$(params.department)/g' | oc create -f - 
+        - name: VERSION
+          value: latest
+      runAfter:
+        - secrets
+      taskRef:
+        kind: ClusterTask
+        name: openshift-client
   workspaces:
     - name: source
+      optional: false
+  finally: []

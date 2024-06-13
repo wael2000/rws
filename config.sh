@@ -18,10 +18,18 @@ rules:
 - apiGroups: [""]
   resources: ["namespaces"]
   verbs: ["get", "watch", "list", "create", "update", "patch", "delete"]
+- apiGroups: [""]
+  resources: ["managedclusters"]
+  verbs: ["get", "watch", "list", "create", "update", "patch", "delete"]
 
 # add pipeline service account of the project where the pipeline runs to this role 
 
 oc adm policy add-cluster-role-to-user namespaces-manager system:serviceaccount:hub-ns:pipeline
+
+oc adm policy add-cluster-role-to-user open-cluster-management:admin:local-cluster system:serviceaccount:hub-ns:pipeline
+oc adm policy add-cluster-role-to-user open-cluster-management:cluster-manager-admin system:serviceaccount:hub-ns:pipeline
+oc adm policy add-cluster-role-to-user open-cluster-management:managedclusterset:admin:default system:serviceaccount:hub-ns:pipeline
+ 
 
 # add cluster-reader role
 oc adm policy add-cluster-role-to-user cluster-reader system:serviceaccount:hub-ns:pipeline

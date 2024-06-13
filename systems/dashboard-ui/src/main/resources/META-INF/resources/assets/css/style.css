@@ -7299,6 +7299,8 @@ header .form-inline .search-form.close {
   top: 0px;
   width: 100%;
   height: 170px;
+  padding-left: 35%;
+  padding-top: 20%;
 }
 
 
