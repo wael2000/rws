@@ -17,10 +17,6 @@ public class PageResource {
     @Inject
     Template index; 
 
-    @Inject
-    Template home;
-
-    
     
     @ConfigProperty(name = "battalionService.url")
     String compositeURL;
@@ -29,10 +25,8 @@ public class PageResource {
     @Produces(MediaType.TEXT_HTML)
     @Path("")
     public TemplateInstance home() {
-        return  home.data("composite",compositeURL)
-                    .data("view", "grid")
-                    .data("username", "Kees")
-                    .data("emp", "")
+        return  index.data("composite",compositeURL)
+                    .data("username", "wael")
                     .data("email", "email");
     }
 

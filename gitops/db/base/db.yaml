@@ -94,9 +94,9 @@ apiVersion: v1
 metadata:
   name: postgresql
 data:
-  database-name: YmF0dGFsaW9u #battalion
+  database-name: ZnNp #fsi
   database-password: QzBtcGxleFBAc3N3MHJk #C0mplexP@ssw0rd
-  database-user: cG9zdGdyZXNAcG9zdGdyZXNxbHNlcnZlci1iYXR0YWxpb24= #postgres@postgresqlserver-battalion
+  database-user: cG9zdGdyZXNAcG9zdGdyZXNxbHNlcnZlci1mc2k= #postgres@postgresqlserver-fsi
 type: Opaque
 ---
 kind: Service
