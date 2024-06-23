@@ -1,3 +1,6 @@
+# desktop env, JDK17
+ export JAVA_HOME=/usr/local/opt/openjdk@17
+
 # argocd 
 oc adm groups new cluster-admins
 oc adm policy add-cluster-role-to-group cluster-admin cluster-admins
