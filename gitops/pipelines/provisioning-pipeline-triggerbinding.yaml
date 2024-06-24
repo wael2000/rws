@@ -12,5 +12,5 @@ spec:
       value: $(body.location)
     - name: type
       value: $(body.type)
-    - name: callback_url
-      value: $(body.callback_url)
+#    - name: callback_url
+#      value: $(body.callback_url)

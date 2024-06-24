@@ -79,12 +79,14 @@ public class DepartmentController {
     @Path("/provision/trigger")
     @Produces(MediaType.APPLICATION_JSON)
     public void provisionTrigger(Department department) {
+        System.out.println("pipelineEnabled=" + pipelineEnabled);
         if(pipelineEnabled){
             Map<String,String> payload = new HashMap<>();
             payload.put("department",department.getName());
-            payload.put("action","provision");
+            payload.put("action","create");
             payload.put("location","dc");
             payload.put("type",department.getTenantType());
+            //payload.put("callback_url","");
             pipelineProxyService.deploy(payload);
         }
     }

@@ -21,7 +21,7 @@ public interface PipelineProxyService {
     @Path("/")
     @Produces("application/json")
     @Consumes("application/json")
-    Object deploy(Object battalion);
+    Object deploy(Object department);
 
 
 }
