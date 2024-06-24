@@ -67,8 +67,6 @@ public class DepartmentService {
         dep.setStatus(Department.PROVISIONED);
         dep.setDc(true);
         em.persist(dep);
-        // trigger the pipeline 
-
         return dep;
     }
 

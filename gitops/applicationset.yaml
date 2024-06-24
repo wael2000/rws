@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: demo
+  name: SYSTEM
   namespace: openshift-gitops
 spec:
   generators:
@@ -9,11 +9,11 @@ spec:
         configMapRef: acm-placement
         labelSelector:
           matchLabels:
-            cluster.open-cluster-management.io/placement: demo-placement
+            cluster.open-cluster-management.io/placement: DEPARTMENT-placement
         requeueAfterSeconds: 180
   template:
     metadata:
-      name: demo-{{name}}
+      name: SYSTEM-{{name}}
       labels:
         velero.io/exclude-from-backup: "true"
     spec:
@@ -24,7 +24,7 @@ spec:
           targetRevision: main
           path: rocketchat
       destination:
-        namespace: demo
+        namespace: DEPARTMENT-{{name}}
         server: "{{server}}"
       syncPolicy:
         automated:
@@ -33,12 +33,3 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - PruneLast=true
----
-apiVersion: cluster.open-cluster-management.io/v1beta1
-kind: Placement
-metadata:
-  name: demo-placement
-  namespace: openshift-gitops
-spec:
-  clusterSets:
-    - default

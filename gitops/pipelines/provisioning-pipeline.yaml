@@ -68,7 +68,7 @@ spec:
         - name: VERSION
           value: latest
       runAfter:
-        - ns
+        - create-ns
       taskRef:
         kind: ClusterTask
         name: openshift-client
@@ -99,25 +99,6 @@ spec:
       workspaces:
         - name: kubeconfig-dir
           workspace: source
-    - name: nodes
-      params:
-        - name: SCRIPT
-          value: oc help
-        - name: VERSION
-          value: latest
-      runAfter:
-        - git-clone
-      taskRef:
-        kind: ClusterTask
-        name: openshift-client
-      when:
-        - input: $(params.type)
-          operator: in
-          values:
-            - nodes
-      workspaces:
-        - name: kubeconfig-dir
-          workspace: source
     - name: callback
       params:
         - name: department
@@ -125,12 +106,16 @@ spec:
         - name: callback_url
           value: $(params.callback_url)
       runAfter:
-        - nodes
         - cluster
-        - ns-config
+        - delete-ns
       taskRef:
         kind: Task
         name: provisioning-callback
+      when:
+        - input: $(params.action)
+          operator: in
+          values:
+            - create
       workspaces:
         - name: workspace
           workspace: source
@@ -182,7 +167,7 @@ spec:
           operator: in
           values:
             - cluster
-    - name: ns
+    - name: create-ns
       params:
         - name: SCRIPT
           value: oc new-project $(params.department)
@@ -198,6 +183,33 @@ spec:
           operator: in
           values:
             - ns
+        - input: $(params.action)
+          operator: in
+          values:
+            - create
+      workspaces:
+        - name: manifest-dir
+          workspace: source
+    - name: delete-ns
+      params:
+        - name: SCRIPT
+          value: oc delete project $(params.department)
+        - name: VERSION
+          value: latest
+      runAfter:
+        - ns-config
+      taskRef:
+        kind: ClusterTask
+        name: openshift-client
+      when:
+        - input: $(params.type)
+          operator: in
+          values:
+            - ns
+        - input: $(params.action)
+          operator: in
+          values:
+            - delete
       workspaces:
         - name: manifest-dir
           workspace: source

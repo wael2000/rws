@@ -2,7 +2,6 @@ apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
   name: application-pipeline
-  namespace: hub-ns
 spec:
   params:
     - default: deploy
