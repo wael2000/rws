@@ -24,7 +24,7 @@ spec:
           targetRevision: main
           path: rocketchat
       destination:
-        namespace: DEPARTMENT-{{name}}
+        namespace: DEPARTMENT
         server: "{{server}}"
       syncPolicy:
         automated:
