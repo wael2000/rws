@@ -10,7 +10,7 @@ spec:
       value: $(body.department)
     - name: location
       value: $(body.location)
-    - name: ns
+    - name: type
       value: $(body.ns)
     - name: callback_url
       value: $(body.callback_url)

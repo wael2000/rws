@@ -7,7 +7,7 @@ spec:
     - name: action
     - name: department
     - name: location
-    - name: ns
+    - name: type
     - name: callback_url
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
@@ -22,8 +22,8 @@ spec:
             value: $(tt.params.department)
           - name: location
             value: $(tt.params.location)
-          - name: ns
-            value: $(tt.params.ns)
+          - name: type
+            value: $(tt.params.type)
           - name: callback_url
             value: $(tt.params.callback_url)
         pipelineRef:
