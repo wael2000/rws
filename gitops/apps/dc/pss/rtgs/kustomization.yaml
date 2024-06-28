@@ -37,7 +37,7 @@ patches:
 - patch: |-
     - op: replace
       path: /spec/template/spec/containers/0/env/0/value 
-      value: rtgs-apis
+      value: rtgs-apis.pss
     - op: replace
       path: /spec/selector/matchLabels/app
       value: rtgs-ui
