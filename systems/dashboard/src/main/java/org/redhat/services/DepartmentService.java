@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.redhat.model.Department;
+import org.redhat.model.App;
 
 
 @ApplicationScoped
@@ -68,6 +69,18 @@ public class DepartmentService {
         dep.setDc(true);
         em.persist(dep);
         return dep;
+    }
+
+        /**
+     * deploy App
+     * @param app
+     */
+    @Transactional
+    public App deploy(App app){
+        App object = App.findById(app.id);
+        object.setDeployed(true);
+        em.persist(object);
+        return object;
     }
 
     /**

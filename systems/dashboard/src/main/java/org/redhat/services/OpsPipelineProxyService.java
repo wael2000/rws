@@ -14,14 +14,14 @@ public interface OpsPipelineProxyService {
    
     /**
      * 
-     * @param battalion
+     * @param application
      * @return
      */
     @POST
     @Path("/")
     @Produces("application/json")
     @Consumes("application/json")
-    Object deploy(Object battalion);
+    Object deploy(Object application);
 
 
 }

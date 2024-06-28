@@ -139,8 +139,10 @@
 
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item" ng-repeat="application in object.applications | orderBy:'id'">
-                            <a href="#"> <i class="fa fa-{{ application.deployed?'check-':'' }}circle-o"></i> {{ application.name }}     
-                            <span class="badge badge-{{ application.deployed?'success':'danger' }} pull-right"> {{ application.deployed?'On':'Off' }} </span>
+                            <a ng-click="deploy(object,application)" href="#"> <i class="fa fa-{{ application.deployed?'check-':'' }}circle-o"></i> {{ application.name }}     
+                            <span ng-if="application.deployed" class="badge badge-success pull-right"> On </span>
+                            <span ng-if="!application.deployed" class="badge badge-danger pull-right"> Off </span>
+                            <!-- <span class="badge badge-{{ application.deployed?'success':'danger' }} pull-right"> {{ application.deployed?'On':'Off' }} </span>-->
                             </a>
                             <br/>
                             <a class="description pull-right">{{ application.description }} </a>                            
@@ -272,7 +274,30 @@
                 var method = "POST";
                 var url = 'http://{composite}/department/provision/trigger';
                 $scope.department = data;
-                jQuery("#div-loading-" + data.id).show();
+                //jQuery("#div-loading-" + data.id).show();
+                $http({
+                    method: method,
+                    url: url,
+                    data: angular.toJson(data),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin' : '*'
+                    }
+                }).then(function successCallback(response) {
+                    _refreshPageData();
+                }, function errorCallback(response) {
+            
+                });
+            }
+
+
+            $scope.deploy = function(department, application){
+                $scope.department = department;
+                var method = "POST";
+                var url = 'http://{composite}/department/deploy/trigger';
+                //jQuery("#div-loading-" + data.id).show();
+                var data = {"department" : department.name.toLowerCase(), "action": "deploy", "location": "dc", "system":application.name.toLowerCase()};
+                console.log(angular.toJson(data));
                 $http({
                     method: method,
                     url: url,

@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.redhat.model.Department;
+import org.redhat.model.App;
 import org.redhat.services.DepartmentService;
 import org.redhat.services.BuildPipelineProxyService;
 import org.redhat.services.OpsPipelineProxyService;
@@ -101,6 +102,40 @@ public class DepartmentController {
     public Department provision(Department department) {
         return service.provision(department);
     }
+
+
+     /**
+     * trigger infrastrucutre provisioning on DC
+     * @param app
+     * @return
+     */
+    @POST
+    @Path("/deploy/trigger")
+    @Produces(MediaType.APPLICATION_JSON)
+    public void deployTrigger(Map<String,String> data) {
+        System.out.println("pipelineEnabled=" + pipelineEnabled);
+        if(pipelineEnabled){
+            Map<String,String> payload = new HashMap<>();
+            payload.put("department",data.get("department"));
+            payload.put("action","deploy");
+            payload.put("location",data.get("location"));
+            payload.put("system",data.get("system").toLowerCase());
+            opsPipelineProxyService.deploy(payload);
+        }
+    }
+    /**
+     * commit infrastrucutre provisioning on DC
+     * @param department
+     * @return
+     */
+    @POST
+    @Path("/deploy/commit")
+    @Produces(MediaType.APPLICATION_JSON)
+    public App deploy(App app) {
+        return service.deploy(app);
+    }
+
+
 
     /**
      * trigger infrastrucutre provisioning on cloud providers
