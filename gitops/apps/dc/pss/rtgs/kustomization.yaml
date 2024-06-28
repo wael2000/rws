@@ -75,5 +75,5 @@ configMapGenerator:
 - name: app-config
   behavior: merge
   literals:
-  - system=RTGS - Real-Time Gross Settlement System
-  - app_name=rtgs
+  - system=rtgs
+  - app_name=RTGS - Real-Time Gross Settlement System
