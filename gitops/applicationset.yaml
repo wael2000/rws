@@ -20,9 +20,11 @@ spec:
       project: default
       sources:
         - repositoryType: git
-          repoURL: https://github.com/levenhagen/rocketchat-acm.git
+          #repoURL: https://github.com/levenhagen/rocketchat-acm.git
+          repoURL: https://github.com/wael2000/dora.git
           targetRevision: main
-          path: rocketchat
+          path: gitops/apps/LOCATION/DEPARTMENT/SYSTEM
+          #path: rocketchat
       destination:
         namespace: DEPARTMENT
         server: "{{server}}"
