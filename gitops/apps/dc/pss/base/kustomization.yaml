@@ -6,5 +6,5 @@ resources:
 configMapGenerator:
 - name: app-config
   literals:
-  - location=dc
+  - location=DC
   - department=pss
