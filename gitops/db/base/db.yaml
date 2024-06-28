@@ -33,7 +33,11 @@ spec:
       containers:
         - resources:
             limits:
-              memory: 512Mi
+              cpu: '1'
+              memory: 2Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
           readinessProbe:
             exec:
               command:
