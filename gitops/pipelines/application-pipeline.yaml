@@ -98,18 +98,45 @@ spec:
       workspaces:
         - name: manifest-dir
           workspace: source
-    - name: callback
+    - name: deploy-callback
       params:
         - name: system
           value: $(params.system)
         - name: callback_url
           value: $(params.callback_url)
+        - name: status
+          value: 'true'
       runAfter:
         - deploy-app
+      taskRef:
+        kind: Task
+        name: deployment-callback
+      when:
+        - input: $(params.action)
+          operator: in
+          values:
+            - deploy
+      workspaces:
+        - name: workspace
+          workspace: source
+    - name: remove-callback
+      params:
+        - name: system
+          value: $(params.system)
+        - name: callback_url
+          value: $(params.callback_url)
+        - name: status
+          value: 'false'
+      runAfter:
         - remove-app
       taskRef:
         kind: Task
         name: deployment-callback
+      when:
+        - input: $(params.action)
+          operator: in
+          values:
+            - remove
       workspaces:
         - name: workspace
           workspace: source

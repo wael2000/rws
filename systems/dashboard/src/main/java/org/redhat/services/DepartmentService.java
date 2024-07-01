@@ -84,7 +84,7 @@ public class DepartmentService {
     @Transactional
     public App deploy(App app){
         App object = App.findByName(app.getName().toUpperCase());
-        object.setDeployed(true);
+        object.setDeployed(app.isDeployed());
         em.persist(object);
         return object;
     }

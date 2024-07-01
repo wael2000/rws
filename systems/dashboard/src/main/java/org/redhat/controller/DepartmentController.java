@@ -117,7 +117,7 @@ public class DepartmentController {
         if(pipelineEnabled){
             Map<String,String> payload = new HashMap<>();
             payload.put("department",data.get("department"));
-            payload.put("action","deploy");
+            payload.put("action",data.get("action"));
             payload.put("location",data.get("location"));
             payload.put("system",data.get("system").toLowerCase());
             opsPipelineProxyService.deploy(payload);

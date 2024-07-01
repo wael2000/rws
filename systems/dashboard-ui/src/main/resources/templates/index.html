@@ -293,8 +293,8 @@
             $scope.deploy = function(department, application){
                 $scope.department = department;
                 var method = "POST";
-                var url = 'http://{composite}/department/deploy/trigger';
-                var data = {"department" : department.name.toLowerCase(), "action": "deploy", "location": "dc", "system":application.name.toLowerCase()};
+                var url = 'http://{composite}/department/deploy/trigger';                
+                var data = {"department" : department.name.toLowerCase(), "action": application.deployed?"remove":"deploy", "location": "dc", "system":application.name.toLowerCase()};
                 console.log(angular.toJson(data));
                 $http({
                     method: method,

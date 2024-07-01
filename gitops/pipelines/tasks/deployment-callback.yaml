@@ -9,6 +9,9 @@ spec:
       description: system
       name: system
       type: string
+    - default: 'true'
+      name: status
+      type: string      
     - name: callback_url
       type: string
       default: "http://dashboard-hub-ns.apps.cluster-t6rzf.t6rzf.sandbox312.opentlc.com/department/deploy/commit"
@@ -20,4 +23,4 @@ spec:
       script: |
         #!/usr/bin/env bash
 
-        curl -XPOST -d '{"name": "$(params.system)"}' $(params.callback_url) -H 'Content-Type: application/json'
+        curl -XPOST -d '{"name": "$(params.system)", "deployed" : $(params.status)}' $(params.callback_url) -H 'Content-Type: application/json'
