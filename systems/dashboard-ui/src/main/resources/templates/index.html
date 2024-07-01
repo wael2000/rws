@@ -290,12 +290,10 @@
                 });
             }
 
-
             $scope.deploy = function(department, application){
                 $scope.department = department;
                 var method = "POST";
                 var url = 'http://{composite}/department/deploy/trigger';
-                //jQuery("#div-loading-" + data.id).show();
                 var data = {"department" : department.name.toLowerCase(), "action": "deploy", "location": "dc", "system":application.name.toLowerCase()};
                 console.log(angular.toJson(data));
                 $http({

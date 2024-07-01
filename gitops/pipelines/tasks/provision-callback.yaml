@@ -11,7 +11,7 @@ spec:
       type: string
     - name: callback_url
       type: string
-      default: "http://mc-mc-datacenter.apps.cluster-gg776.gg776.sandbox2839.opentlc.com/provision/commit"
+      default: "http://dashboard-hub-ns.apps.cluster-t6rzf.t6rzf.sandbox312.opentlc.com/provision/commit"
   workspaces:
     - name: workspace
   steps:

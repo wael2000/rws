@@ -53,5 +53,9 @@ public class App extends PanacheEntity {
     public void setDeployed(Boolean deployed) {
         this.deployed = deployed;
     }
+
+    public static App findByName(String name){
+        return find("name", name).firstResult();
+    }
     
 }

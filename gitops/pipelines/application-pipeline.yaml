@@ -16,6 +16,9 @@ spec:
     - default: dc
       name: location
       type: string
+    - default: 'http://dashboard-hub-ns.apps.cluster-t6rzf.t6rzf.sandbox312.opentlc.com/department/deploy/commit'
+      name: callback_url
+      type: string
   tasks:
     - name: git-clone
       params:
@@ -48,8 +51,7 @@ spec:
         - name: verbose
           value: 'true'
         - name: gitInitImage
-          value: >-
-            registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:868966ef9d4b54952d8a74eb83bba40eb1f52c0148994fa704efd0e3797c61c5
+          value: 'registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:868966ef9d4b54952d8a74eb83bba40eb1f52c0148994fa704efd0e3797c61c5'
         - name: userHome
           value: /home/git
       taskRef:
@@ -61,8 +63,7 @@ spec:
     - name: deploy-app
       params:
         - name: SCRIPT
-          value: >-
-            sed -e 's/DEPARTMENT/$(params.department)/g' -e 's/SYSTEM/$(params.system)/g' -e 's/LOCATION/$(params.location)/g' gitops/applicationset.yaml | oc create -f - -n openshift-gitops
+          value: sed -e 's/DEPARTMENT/$(params.department)/g' -e 's/SYSTEM/$(params.system)/g' -e 's/LOCATION/$(params.location)/g' gitops/applicationset.yaml | oc create -f - -n openshift-gitops
         - name: VERSION
           value: latest
       runAfter:
@@ -81,11 +82,7 @@ spec:
     - name: remove-app
       params:
         - name: SCRIPT
-          value: >-
-            sed -e 's/DEPARTMENT/$(params.department)/g' -e
-            's/SYSTEM/$(params.system)/g' -e
-            's/LOCATION/$(params.location)/g' gitops/applicationset.yaml | oc delete
-            -f - -n openshift-gitops
+          value: sed -e 's/DEPARTMENT/$(params.department)/g' -e 's/SYSTEM/$(params.system)/g' -e 's/LOCATION/$(params.location)/g' gitops/applicationset.yaml | oc delete -f - -n openshift-gitops
         - name: VERSION
           value: latest
       runAfter:
@@ -101,7 +98,20 @@ spec:
       workspaces:
         - name: manifest-dir
           workspace: source
+    - name: callback
+      params:
+        - name: system
+          value: $(params.system)
+        - name: callback_url
+          value: $(params.callback_url)
+      runAfter:
+        - deploy-app
+        - remove-app
+      taskRef:
+        kind: Task
+        name: deployment-callback
+      workspaces:
+        - name: workspace
+          workspace: source
   workspaces:
     - name: source
-      optional: false
-  finally: []

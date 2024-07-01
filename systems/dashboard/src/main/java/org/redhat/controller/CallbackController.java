@@ -2,7 +2,8 @@ package org.redhat.controller;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -34,7 +35,7 @@ public class CallbackController {
     Map<Long, Session> sessions = new ConcurrentHashMap<>();
     
     Map<Long, Department> systems = new HashMap<>();
-    Map<Long, Set<App>> apps = new HashMap<>();
+    List<App> apps = new ArrayList<App>();
 
     @OnOpen
     public void onOpen(Session session, @PathParam("department") Long department) {
@@ -98,6 +99,25 @@ public class CallbackController {
                         System.out.println("Unable to send message: " + result.getException());
                     }
                     });
+                }
+                if(apps.size()==0){
+                    apps = service.getApps();
+                } else {
+                    List<App> updatedApps = service.getApps();
+                    for(int index=0;index<apps.size();index++){
+                        App app1 = apps.get(index);
+                        App app2 = updatedApps.get(index);
+                        if(app1.isDeployed()!=app2.isDeployed()){
+                            String message = "a," + app1.getName() ;
+                            apps.add(index, app2);
+                            System.out.println("b-message: " + message);
+                            sessions.get(k).getAsyncRemote().sendObject(message, result -> {
+                            if (result.getException() != null) {
+                                System.out.println("Unable to send message: " + result.getException());
+                            }
+                            });
+                        }
+                    }
                 }
                 /* 
                 if( apps.get(k)==null)

@@ -3,6 +3,7 @@ package org.redhat.services;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -10,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.redhat.model.Department;
+
 import org.redhat.model.App;
 
 
@@ -46,6 +48,10 @@ public class DepartmentService {
                 .getResultList().toArray(new Department[0]);
     }
 
+    public List<App> getApps(){
+        return App.listAll();
+    }
+
     public Map<Long, Department> findSystemStatusByIds(Set<Long> ids){
         Map<Long, Department> systems = new HashMap<>();
         Department[] departments = em.createNamedQuery("Department.findSystemStatusByIds", Department.class)
@@ -77,7 +83,7 @@ public class DepartmentService {
      */
     @Transactional
     public App deploy(App app){
-        App object = App.findById(app.id);
+        App object = App.findByName(app.getName().toUpperCase());
         object.setDeployed(true);
         em.persist(object);
         return object;
