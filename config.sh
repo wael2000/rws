@@ -13,6 +13,7 @@ oc policy add-role-to-user admin system:serviceaccount:hub-ns:pipeline -n opensh
 # lift pipeline permission up 
 # create a new cluster role 
 
+cat <<EOF | oc apply -f -
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -24,19 +25,47 @@ rules:
 - apiGroups: [""]
   resources: ["managedclusters"]
   verbs: ["get", "watch", "list", "create", "update", "patch", "delete"]
+EOF
 
-# add pipeline service account of the project where the pipeline runs to this role 
-
+# assign namespaces-manager rol to  pipeline service account 
 oc adm policy add-cluster-role-to-user namespaces-manager system:serviceaccount:hub-ns:pipeline
-
+# grant pipeline service account access to manage clusters and cluster-sets
 oc adm policy add-cluster-role-to-user open-cluster-management:admin:local-cluster system:serviceaccount:hub-ns:pipeline
 oc adm policy add-cluster-role-to-user open-cluster-management:cluster-manager-admin system:serviceaccount:hub-ns:pipeline
 oc adm policy add-cluster-role-to-user open-cluster-management:managedclusterset:admin:default system:serviceaccount:hub-ns:pipeline
  
-
 # add cluster-reader role
 oc adm policy add-cluster-role-to-user cluster-reader system:serviceaccount:hub-ns:pipeline
-
+# add self-provisioner role
 oc adm policy \
     add-cluster-role-to-user self-provisioner \
     system:serviceaccount:hub-ns:pipeline
+
+# install operators
+# Gitops
+oc create ns openshift-gitops-operator
+oc label namespace openshift-gitops-operator openshift.io/cluster-monitoring=true
+
+cat <<EOF | oc apply -f -
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: openshift-gitops-operator
+  namespace: openshift-gitops-operator
+spec:
+  upgradeStrategy: Default
+EOF
+
+cat <<EOF | oc apply -f -
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: openshift-gitops-operator
+  namespace: openshift-gitops-operator
+spec:
+  channel: latest 
+  installPlanApproval: Automatic
+  name: openshift-gitops-operator 
+  source: redhat-operators 
+  sourceNamespace: openshift-marketplace 
+EOF

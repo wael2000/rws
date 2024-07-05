@@ -145,16 +145,16 @@ public class DepartmentController {
     @POST
     @Path("/scale/trigger")
     @Consumes(MediaType.APPLICATION_JSON)  
-    public void scaleTrigger(Department department) { 
+    public void scaleTrigger(Map<String,String> data) { 
         // trigger the pipeline
         // last step of the pipeline is to call /scale methods to update 
         // the db records accordingly
+        System.out.println(data);
         if(pipelineEnabled){
             Map<String,String> payload = new HashMap<>();
-            payload.put("department",department.getName());
-            payload.put("action","provision");
-            payload.put("location",department.getProvider());
-            payload.put("type",department.getTenantType());
+            payload.put("department",data.get("department"));
+            payload.put("action",data.get("action"));
+            payload.put("scaler",data.get("scaler"));
             pipelineProxyService.deploy(payload);
         }
     }

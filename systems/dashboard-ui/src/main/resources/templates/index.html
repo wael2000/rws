@@ -111,9 +111,9 @@
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <div class="dropdown-menu-content">
-                                    <a ng-click="provision(object)" class="dropdown-item {{object.dc?'disabled':''}}" href="#">DC</a>
-                                    <a ng-if="object.status=='provisioned'" ng-click="scale(object,'azure')" class="dropdown-item {{object.azure?'disabled':''}}" href="#">Azure</a>
-                                    <a ng-if="object.status=='provisioned'" ng-click="scale(object,'aws')" class="dropdown-item {{object.aws?'disabled':''}}" href="#">AWS</a>
+                                    <a ng-click="provision(object)" class="dropdown-item {{object.dc?'disabled':''}}" href="#">Start</a>
+                                    <a ng-if="object.status=='provisioned' && object.tenantType=='ns'" ng-click="scale(object,'azure', object.azure?'remove':'deploy')" class="dropdown-item {{object.azure?'disabled':''}}" href="#">Azure</a>
+                                    <a ng-if="object.status=='provisioned' && object.tenantType=='ns'" ng-click="scale(object,'aws', object.aws?'remove':'deploy')" class="dropdown-item {{object.aws?'disabled':''}}" href="#">AWS</a>
                                 </div>
                             </div>
                         </div>
@@ -295,7 +295,6 @@
                 var method = "POST";
                 var url = 'http://{composite}/department/deploy/trigger';                
                 var data = {"department" : department.name.toLowerCase(), "action": application.deployed?"remove":"deploy", "location": "dc", "system":application.name.toLowerCase()};
-                console.log(angular.toJson(data));
                 $http({
                     method: method,
                     url: url,
@@ -311,15 +310,17 @@
                 });
             }
 
-            $scope.scale = function(department,scaler){
+            $scope.scale = function(department,scaler,action){
                 var method = "POST";
-                var url = 'http://{composite}/department/scale/commit';
-                department.provider = scaler;
-                //var data = {"department": department,"scaler":scaler};
+                var url = 'http://{composite}/department/scale/trigger';
+                $scope.department = department;
+                var data = {"department" : department.name.toLowerCase(), 
+                            "action": action, 
+                            "scaler": scaler};
                 $http({
                     method: method,
                     url: url,
-                    data: angular.toJson(department),
+                    data: angular.toJson(data),
                     headers: {
                         'Content-Type': 'application/json',
                         'Access-Control-Allow-Origin' : '*'
