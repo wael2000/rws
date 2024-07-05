@@ -14,7 +14,7 @@ spec:
         requeueAfterSeconds: 180
   template:
     metadata:
-      name: DEPARTMENT-{{name}}
+      name: DEPARTMENT-LOCATION-db-{{name}}
       labels:
         velero.io/exclude-from-backup: "true"
     spec:
