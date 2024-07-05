@@ -1,5 +1,6 @@
 # desktop env, JDK17
- export JAVA_HOME=/usr/local/opt/openjdk@17
+export JAVA_HOME=/usr/local/opt/openjdk@17
+export TESTCONTAINERS_RYUK_DISABLED=true
 
 # argocd 
 oc adm groups new cluster-admins
@@ -69,3 +70,5 @@ spec:
   source: redhat-operators 
   sourceNamespace: openshift-marketplace 
 EOF
+
+
