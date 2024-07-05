@@ -9,7 +9,7 @@ spec:
         configMapRef: acm-placement
         labelSelector:
           matchLabels:
-            cluster.open-cluster-management.io/placement: NAMESPACE-placement
+            cluster.open-cluster-management.io/placement: LOCATION-placement
         requeueAfterSeconds: 180
   template:
     metadata:
@@ -34,11 +34,48 @@ spec:
           - CreateNamespace=true
           - PruneLast=true
 ---
-apiVersion: cluster.open-cluster-management.io/v1beta1
-kind: Placement
+# db uses one of the provider placement rules dc-placement, azure-placement, aws-placement
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
 metadata:
-  name: NAMESPACE-placement
+  name: DEPARTMENT-LOCATION-db
   namespace: openshift-gitops
 spec:
-  clusterSets:
-    - default
+  generators:
+    - clusterDecisionResource:
+        configMapRef: acm-placement
+        labelSelector:
+          matchLabels:
+            cluster.open-cluster-management.io/placement: LOCATION-placement
+        requeueAfterSeconds: 180
+  template:
+    metadata:
+      name: DEPARTMENT-{{name}}
+      labels:
+        velero.io/exclude-from-backup: "true"
+    spec:
+      project: default
+      sources:
+        - repositoryType: git
+          repoURL: https://github.com/wael2000/dora.git
+          targetRevision: main
+          path: gitops/db/LOCATION
+      destination:
+        namespace: DEPARTMENT
+        server: "{{server}}"
+      syncPolicy:
+        automated:
+          selfHeal: true
+          prune: true
+        syncOptions:
+          - CreateNamespace=true
+          - PruneLast=true          
+#---
+#apiVersion: cluster.open-cluster-management.io/v1beta1
+#kind: Placement
+#metadata:
+#  name: NAMESPACE-placement
+#  namespace: openshift-gitops
+#spec:
+#  clusterSets:
+#    - default
