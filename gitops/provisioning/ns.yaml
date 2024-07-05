@@ -33,23 +33,6 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - PruneLast=true
----
-apiVersion: cluster.open-cluster-management.io/v1beta1
-kind: Placement
-metadata:
-  name: DEPARTMENT-placement
-  namespace: openshift-gitops
-spec:
-  clusterSets:
-    - default
-  predicates:
-    - requiredClusterSelector:
-        labelSelector:
-          matchExpressions:
-            - key: provider
-              operator: In
-              values:
-                - dc
 #---
 #apiVersion: cluster.open-cluster-management.io/v1beta1
 #kind: Placement
