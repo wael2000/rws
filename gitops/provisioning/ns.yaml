@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: DEPARTMENT-LOCATION
+  name: LOCATION-DEPARTMENT
   namespace: openshift-gitops
 spec:
   generators:
@@ -13,7 +13,7 @@ spec:
         requeueAfterSeconds: 180
   template:
     metadata:
-      name: DEPARTMENT-{{name}}
+      name: LOCATION-DEPARTMENT-{{name}}
       labels:
         velero.io/exclude-from-backup: "true"
     spec:
