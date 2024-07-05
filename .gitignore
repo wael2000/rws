@@ -1,3 +1,4 @@
 gitops/provisioning/cluster/install-config.yaml
 gitops/pipelines/tasks/cluster-secrets.yaml
 gitops/provisioning/cluster/cluster-secrets-list.yaml
+gitops/provisioning/ns copy.yaml
