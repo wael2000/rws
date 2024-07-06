@@ -5,6 +5,7 @@ metadata:
   labels:
     app: apis
     app.kubernetes.io/part-of: system
+    rhsi: included
 spec:
   ipFamilies:
     - IPv4

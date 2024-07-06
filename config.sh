@@ -72,3 +72,8 @@ spec:
 EOF
 
 
+# creaet SA account
+
+oc create sa rhsi -n hub-ns
+oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:hub-ns:rhsi
+
