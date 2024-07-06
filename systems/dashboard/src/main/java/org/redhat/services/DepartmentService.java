@@ -69,10 +69,37 @@ public class DepartmentService {
      * @param department
      */
     @Transactional
-    public Department provision(Department department){
-        Department dep = Department.findByName(department.getName());
-        dep.setStatus(Department.PROVISIONED);
-        dep.setDc(true);
+    public Department provision(Map<String,String> data){
+        System.out.println(data);
+        Department dep = Department.findByName(data.get("name"));
+        switch (data.get("action")) {
+            case "create":
+                System.out.println("create action");
+                if("dc".equals(data.get("location"))) dep.setDc(true);
+                else 
+                if("azure".equals(data.get("location"))) dep.setAzure(true);
+                else 
+                if("aws".equals(data.get("location"))) dep.setAws(true);
+                break;
+            case "delete":
+                System.out.println("delete action");
+                if("dc".equals(data.get("location"))) dep.setDc(false);
+                else 
+                if("azure".equals(data.get("location"))) dep.setAzure(false);
+                else 
+                if("aws".equals(data.get("location"))) dep.setAws(false);
+                break;
+            default:
+                break;
+        }
+        if(!dep.isAws() && !dep.isAzure() && !dep.isDc()){
+            System.out.println("tatus DEPRIVED");
+            dep.setStatus(Department.DEPRIVED);
+        }
+        else {
+            System.out.println("tatus PROVISIONED");
+            dep.setStatus(Department.PROVISIONED);
+        }
         em.persist(dep);
         return dep;
     }

@@ -9,6 +9,14 @@ spec:
       description: department
       name: department
       type: string
+    - default: create
+      description: action
+      name: action
+      type: string
+    - default: dc
+      description: location
+      name: location
+      type: string      
     - name: callback_url
       type: string
       default: "http://dashboard-hub-ns.apps.cluster-t6rzf.t6rzf.sandbox312.opentlc.com/provision/commit"
@@ -20,4 +28,4 @@ spec:
       script: |
         #!/usr/bin/env bash
 
-        curl -XPOST -d '{"name": "$(params.department)"}' $(params.callback_url) -H 'Content-Type: application/json'
+        curl -XPOST -d '{"name": "$(params.department)", "location": "$(params.location)", "action": "$(params.action)"}' $(params.callback_url) -H 'Content-Type: application/json'

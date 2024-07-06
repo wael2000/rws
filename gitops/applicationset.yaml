@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: DEPARTMENT-SYSTEM
+  name: LOCATION-DEPARTMENT-SYSTEM
   namespace: openshift-gitops
 spec:
   generators:
@@ -13,18 +13,16 @@ spec:
         requeueAfterSeconds: 180
   template:
     metadata:
-      name: DEPARTMENT-SYSTEM-{{name}}
+      name: LOCATION-DEPARTMENT-SYSTEM
       labels:
         velero.io/exclude-from-backup: "true"
     spec:
       project: default
       sources:
         - repositoryType: git
-          #repoURL: https://github.com/levenhagen/rocketchat-acm.git
           repoURL: https://github.com/wael2000/dora.git
           targetRevision: main
           path: gitops/apps/LOCATION/DEPARTMENT/SYSTEM
-          #path: rocketchat
       destination:
         namespace: DEPARTMENT
         server: "{{server}}"

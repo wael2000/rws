@@ -111,9 +111,9 @@
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 <div class="dropdown-menu-content">
-                                    <a ng-click="provision(object)" class="dropdown-item {{object.dc?'disabled':''}}" href="#">Start</a>
-                                    <a ng-if="object.status=='provisioned' && object.tenantType=='ns'" ng-click="scale(object,'azure', object.azure?'remove':'deploy')" class="dropdown-item {{object.azure?'disabled':''}}" href="#">Azure</a>
-                                    <a ng-if="object.status=='provisioned' && object.tenantType=='ns'" ng-click="scale(object,'aws', object.aws?'remove':'deploy')" class="dropdown-item {{object.aws?'disabled':''}}" href="#">AWS</a>
+                                    <a ng-click="provision(object,'dc', object.dc?'delete':'create')" class="dropdown-item" href="#">DC</a>
+                                    <a ng-if="object.status=='provisioned' && object.tenantType=='ns'" ng-click="provision(object,'azure', object.azure?'delete':'create')" class="dropdown-item" href="#">Azure</a>
+                                    <a ng-if="object.status=='provisioned' && object.tenantType=='ns'" ng-click="provision(object,'aws', object.aws?'delete':'create')" class="dropdown-item" href="#">AWS</a>
                                 </div>
                             </div>
                         </div>
@@ -270,11 +270,14 @@
                 });
             }
             
-            $scope.provision = function(data){
+            $scope.provision = function(department,location,action){
                 var method = "POST";
                 var url = 'http://{composite}/department/provision/trigger';
-                $scope.department = data;
-                //jQuery("#div-loading-" + data.id).show();
+                $scope.department = department;
+                var data = {"department" : department.name.toLowerCase(), 
+                            "action": action, 
+                            "location": location,
+                            "type":department.tenantType};
                 $http({
                     method: method,
                     url: url,

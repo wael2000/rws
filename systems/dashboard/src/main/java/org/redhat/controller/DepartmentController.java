@@ -79,16 +79,24 @@ public class DepartmentController {
     @POST
     @Path("/provision/trigger")
     @Produces(MediaType.APPLICATION_JSON)
-    public void provisionTrigger(Department department) {
+    public void provisionTrigger(Map<String,String> data) {
         System.out.println("pipelineEnabled=" + pipelineEnabled);
         if(pipelineEnabled){
             Map<String,String> payload = new HashMap<>();
+            payload.put("department",data.get("department"));
+            payload.put("action",data.get("action"));
+            payload.put("location",data.get("location"));
+            payload.put("type",data.get("type"));
+            pipelineProxyService.deploy(payload);
+            /* 
             payload.put("department",department.getName());
             payload.put("action","create");
             payload.put("location","dc");
             payload.put("type",department.getTenantType());
-            //payload.put("callback_url","");
+            //payload.put("callback_url",""); 
             pipelineProxyService.deploy(payload);
+            */
+            
         }
     }
     /**
@@ -99,8 +107,8 @@ public class DepartmentController {
     @POST
     @Path("/provision/commit")
     @Produces(MediaType.APPLICATION_JSON)
-    public Department provision(Department department) {
-        return service.provision(department);
+    public Department provision(Map<String,String> data) {
+        return service.provision(data);
     }
 
 
