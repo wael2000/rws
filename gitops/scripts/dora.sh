@@ -86,7 +86,7 @@ echo " ┃ ${menu_array[1]}                ┃ ${menu_array[2]}                 
 echo " ┃ ${menu_array[5]}        ┃ ${menu_array[6]}         ┃ ${menu_array[7]}     ┃ ${menu_array[8]}            ┃"
 echo " ┃ ${menu_array[9]}      ┃ ${menu_array[10]}      ┃ ${menu_array[11]}  ┃ ${menu_array[12]}         ┃"
 echo " ┣━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━╋━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
-echo " ┃  [l] Link All        [e] Expose DB service        [d] Delete all       ┃ $RESULT"
+echo " ┃  [l] Link All        [e] Expose services          [d] Delete all       ┃ $RESULT"
 echo " ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
 
 }
@@ -148,6 +148,7 @@ menu_array["4"]="\033[43m4) init\033[0m"
 oc login --server=$DC_URL -u $DC_UID -p $DC_PWD --insecure-skip-tls-verify=true
 oc project $PROJECT
 skupper service bind postgresql service postgresqldb
+skupper service bind rtgs-apis service rtgs-apis
 menu_array["5"]="\033[43m5) bind service\033[0m"
 menu_array["9"]="9) unbind service"
 ;;
