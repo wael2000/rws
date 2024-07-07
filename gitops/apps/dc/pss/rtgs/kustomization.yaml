@@ -68,7 +68,7 @@ patches:
       value: rtgs-apis
     - op: replace
       path: /spec/replicas
-      value: 0
+      value: 1
   target:
     kind: Deployment
     name: apis
