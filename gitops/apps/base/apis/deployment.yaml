@@ -32,7 +32,7 @@ spec:
             - name: location
               valueFrom:
                 configMapKeyRef:
-                  name: app-config
+                  name: db-config
                   key: location
             - name: department
               valueFrom:
