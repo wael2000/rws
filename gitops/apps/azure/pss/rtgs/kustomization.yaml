@@ -18,6 +18,18 @@ patches:
 - patch: |-
     - op: replace
       path: /metadata/name
+      value: rtgs-apis-rshi
+    - op: replace
+      path: /metadata/labels/app
+      value: rtgs-apis
+    - op: replace
+      path: /metadata/labels/app.kubernetes.io~1part-of
+      value: rtgs      
+  target:
+    name: apis-rshi
+- patch: |-
+    - op: replace
+      path: /metadata/name
       value: rtgs-ui
     - op: replace
       path: /metadata/labels/app
@@ -67,7 +79,7 @@ patches:
 - patch: |-
     - op: replace
       path: /spec/selector/app
-      value: rtgs-apis-rhsi
+      value: rtgs-apis
   target:
     kind: Service
     name: apis-rhsi    

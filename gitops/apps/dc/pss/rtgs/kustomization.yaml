@@ -82,6 +82,13 @@ patches:
       value: rtgs-apis
   target:
     kind: Service
+    name: apis-rhsi    
+- patch: |-
+    - op: replace
+      path: /spec/selector/app
+      value: rtgs-apis
+  target:
+    kind: Service
     name: apis-rhsi
 - patch: |-
     - op: replace
