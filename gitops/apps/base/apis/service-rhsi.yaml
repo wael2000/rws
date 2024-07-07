@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: apis-rshi
+  name: apis-rhsi
   labels:
     app: apis
     app.kubernetes.io/part-of: system
