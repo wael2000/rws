@@ -65,7 +65,10 @@ patches:
       value: rtgs-apis
     - op: replace
       path: /spec/template/metadata/labels/app
-      value: rtgs-apis            
+      value: rtgs-apis
+    - op: replace
+      path: /spec/replicas
+      value: 0
   target:
     kind: Deployment
     name: apis
