@@ -7,3 +7,4 @@ configMapGenerator:
     behavior: merge
     literals:
       - config.sql=insert into config (id,key,value) values (1,'dblocation','azure');
+      - location=Azure
