@@ -147,8 +147,8 @@ menu_array["4"]="\033[43m4) init\033[0m"
 # DC Bind
 oc login --server=$DC_URL -u $DC_UID -p $DC_PWD --insecure-skip-tls-verify=true
 oc project $PROJECT
-skupper service bind postgresql service postgresqldb
-skupper service bind rtgs-apis service rtgs-apis
+#skupper service bind postgresql service postgresqldb
+skupper service bind rtgs-apis service rtgs-apis-rhsi
 menu_array["5"]="\033[43m5) bind service\033[0m"
 menu_array["9"]="9) unbind service"
 ;;
@@ -166,7 +166,8 @@ menu_array["10"]="10) unbind service"
 # bind service on Azure
 oc login --server=$AZURE_URL -u $AZURE_UID -p $AZURE_PWD --insecure-skip-tls-verify=true
 oc project $PROJECT
-skupper service bind postgresql service postgresqldb
+skupper service bind rtgs-apis service rtgs-apis-rhsi
+#skupper service bind postgresql service postgresqldb
 menu_array["7"]="\033[43m7) bind service\033[0m"
 menu_array["11"]="11) unbind service"
 ;;
@@ -250,7 +251,7 @@ fi
 # DC : Expose db service
 oc login --server=$DC_URL -u $DC_UID -p $DC_PWD --insecure-skip-tls-verify=true
 oc project $PROJECT
-skupper service create postgresql 5432 --protocol tcp
+#skupper service create postgresql 5432 --protocol tcp
 skupper service create rtgs-apis 8080 --protocol http
 ;;
 

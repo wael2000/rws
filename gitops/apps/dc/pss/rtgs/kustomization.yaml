@@ -18,7 +18,7 @@ patches:
 - patch: |-
     - op: replace
       path: /metadata/name
-      value: rtgs-apis-rshi
+      value: rtgs-apis-rhsi
     - op: replace
       path: /metadata/labels/app
       value: rtgs-apis
