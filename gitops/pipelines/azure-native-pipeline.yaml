@@ -57,7 +57,7 @@ spec:
     - name: deploy-azure-service
       params:
         - name: SCRIPT
-          value: oc create -f gitops/azure-db-application.yaml -n openshift-gitops
+          value: oc create -f gitops/db/azure-db-application.yaml -n openshift-gitops
         - name: VERSION
           value: latest
       runAfter:
