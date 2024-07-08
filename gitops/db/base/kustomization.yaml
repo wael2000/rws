@@ -4,4 +4,5 @@ resources:
 - db-config.yaml
 - db.yaml
 - db-job.yaml
-- db-service.yaml
+# delete service when you enable RHSI
+#- db-service.yaml
