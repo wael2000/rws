@@ -4,7 +4,7 @@ metadata:
   name: postgresqlserver-fsi
 spec:
   location: eastus
-  resourceGroup: openenv-fxgmd
+  resourceGroup: openenv-5bthq
   serverVersion: "10"
   sslEnforcement: Enabled
   replicaProperties: {}
@@ -23,7 +23,7 @@ kind: PostgreSQLDatabase
 metadata:
   name: fsi
 spec:
-  resourceGroup: openenv-fxgmd
+  resourceGroup: openenv-5bthq
   server: postgresqlserver-fsi
 ---
 apiVersion: azure.microsoft.com/v1alpha1
@@ -31,7 +31,7 @@ kind: PostgreSQLFirewallRule
 metadata:
   name: postgresqlfirewallrule-fsi
 spec:
-  resourceGroup: openenv-fxgmd
+  resourceGroup: openenv-5bthq
   server: postgresqlserver-fsi
   startIpAddress: 0.0.0.0
   endIpAddress: 255.255.255.255
