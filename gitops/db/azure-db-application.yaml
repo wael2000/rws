@@ -8,7 +8,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: gitops/azure-native
+    path: gitops/db/azure-native
     repoURL: https://github.com/wael2000/dora
     targetRevision: main
   syncPolicy:
