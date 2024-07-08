@@ -61,7 +61,7 @@ spec:
         - name: VERSION
           value: latest
       runAfter:
-        - create-secret
+        - git-clone
       taskRef:
         kind: ClusterTask
         name: openshift-client
@@ -73,24 +73,6 @@ spec:
       workspaces:
         - name: manifest-dir
           workspace: source
-    - name: create-secret
-      params:
-        - name: SCRIPT
-          value: |-
-            oc create secret generic postgresqlserver-postgresqlserver-battalion --from-literal=fullyQualifiedUsername=postgres@postgresqlserver-battalion --from-literal=password=C0mplexP@ssw0rd \
-            --from-literal=postgreSqlServerName=postgresqlserver-battalion --from-literal=username=postgres -n azure-native
-        - name: VERSION
-          value: latest
-      runAfter:
-        - git-clone
-      taskRef:
-        kind: ClusterTask
-        name: openshift-client
-      when:
-        - input: $(params.action)
-          operator: in
-          values:
-            - deploy
   workspaces:
     - name: source
 ---
