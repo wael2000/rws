@@ -79,3 +79,14 @@ EOF
 oc create sa rhsi -n hub-ns
 oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:hub-ns:rhsi
 
+
+# once pipelines created, we need to expose the evernt listener svc
+oc expose svc el-application-event-listener
+oc expose svc el-provisioning-event-listener
+oc expose svc el-azure-event-listener
+
+oc get route | grep el-
+# update the dashboard-config configmap with route values 
+# el-application-event-listener-hub-ns.apps.cluster-sql9s.sql9s.sandbox1778.opentlc.com
+# el-azure-event-listener-hub-ns.apps.cluster-sql9s.sql9s.sandbox1778.opentlc.com
+# el-provisioning-event-listener-hub-ns.apps.cluster-sql9s.sql9s.sandbox1778.opentlc.com

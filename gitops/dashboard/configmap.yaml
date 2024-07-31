@@ -5,8 +5,8 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 data:
-  pipeline.el: http://dummy
-  ops.pipeline.el: http://dummy
-  azure.pipeline.el: http://dummy
+  pipeline.el: http://el-provisioning-event-listener-hub-ns.apps.cluster-sql9s.sql9s.sandbox1778.opentlc.com
+  ops.pipeline.el: http://el-application-event-listener-hub-ns.apps.cluster-sql9s.sql9s.sandbox1778.opentlc.com
+  azure.pipeline.el: http://el-azure-event-listener-hub-ns.apps.cluster-sql9s.sql9s.sandbox1778.opentlc.com
   build.pipeline.el: http://dummy
   department.url: dashboard-hub-ns.apps.cluster-sql9s.sql9s.sandbox1778.opentlc.com
