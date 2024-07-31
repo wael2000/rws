@@ -9,4 +9,4 @@ data:
   ops.pipeline.el: http://dummy
   azure.pipeline.el: http://dummy
   build.pipeline.el: http://dummy
-  department.url: dashboard-hub-ns.apps.cluster-wzh5s.wzh5s.sandbox491.opentlc.com
+  department.url: dashboard-hub-ns.apps.cluster-sql9s.sql9s.sandbox1778.opentlc.com

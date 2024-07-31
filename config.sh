@@ -3,6 +3,7 @@ export JAVA_HOME=/usr/local/opt/openjdk@17
 export TESTCONTAINERS_RYUK_DISABLED=true
 
 # argocd 
+oc new-project hub-ns
 oc adm groups new cluster-admins
 oc adm policy add-cluster-role-to-group cluster-admin cluster-admins
 oc adm groups add-users cluster-admins admin
@@ -42,6 +43,7 @@ oc adm policy \
     add-cluster-role-to-user self-provisioner \
     system:serviceaccount:hub-ns:pipeline
 
+# Start: We usually use web console for this 
 # install operators
 # Gitops
 oc create ns openshift-gitops-operator
@@ -70,7 +72,7 @@ spec:
   source: redhat-operators 
   sourceNamespace: openshift-marketplace 
 EOF
-
+# End: We usually use web console for this 
 
 # creaet SA account
 
