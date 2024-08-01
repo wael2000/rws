@@ -92,6 +92,15 @@ oc get route | grep el-
 # el-provisioning-event-listener-hub-ns.apps.cluster-sql9s.sql9s.sandbox1778.opentlc.com
 
 # you need to create env secrets
+# you can use base64 online site https://emn178.github.io/online-tools/base64_encode.html
 # - update cluster-secrets-list.yaml
 # - update cluser-secrets.yaml with the three entries (base64 encoded values)
-oc create -f cluster-set.yaml -n hub-ns
+oc create -f cluster-secrets.yaml -n hub-ns
+
+
+# you need to create all placement rule including 
+# placement/apps-placement.yaml
+# placement/location-placement.yaml
+
+oc reate -f apps-placement.yaml
+oc reate -f location-placement.yaml
