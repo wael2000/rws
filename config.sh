@@ -90,3 +90,8 @@ oc get route | grep el-
 # el-application-event-listener-hub-ns.apps.cluster-sql9s.sql9s.sandbox1778.opentlc.com
 # el-azure-event-listener-hub-ns.apps.cluster-sql9s.sql9s.sandbox1778.opentlc.com
 # el-provisioning-event-listener-hub-ns.apps.cluster-sql9s.sql9s.sandbox1778.opentlc.com
+
+# you need to create env secrets
+# - update cluster-secrets-list.yaml
+# - update cluser-secrets.yaml with the three entries (base64 encoded values)
+oc create -f cluster-set.yaml -n hub-ns
