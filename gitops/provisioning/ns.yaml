@@ -33,23 +33,24 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - PruneLast=true
----
-apiVersion: cluster.open-cluster-management.io/v1beta1
-kind: Placement
-metadata:
-  name: DEPARTMENT-placement
-  namespace: openshift-gitops
-spec:
-  clusterSets:
-    - default
-  predicates:
-    - requiredClusterSelector:
-        labelSelector:
-          matchLabels:
-            provider: dc
-        claimSelector:
-          matchExpressions:
-            - key: platform.open-cluster-management.io
-              operator: In
-              values:
-                - aws 
+#--- we dont need it
+#--- All placement objects are created upfront using gitops/placement/apps-placement.yaml
+#apiVersion: cluster.open-cluster-management.io/v1beta1
+#kind: Placement
+#metadata:
+#  name: DEPARTMENT-placement
+#  namespace: openshift-gitops
+#spec:
+#  clusterSets:
+#    - default
+#  predicates:
+#    - requiredClusterSelector:
+#        labelSelector:
+#          matchLabels:
+#            provider: dc
+#        claimSelector:
+#          matchExpressions:
+#            - key: platform.open-cluster-management.io
+#              operator: In
+#              values:
+#                - aws    
