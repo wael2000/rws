@@ -4,7 +4,7 @@ metadata:
   name: db-config
   annotations:
     argocd.argoproj.io/hook: PostSync
-    argocd.argoproj.io/sync-wave: "3"  
+    #argocd.argoproj.io/sync-wave: "3"  
 spec:
   parallelism: 1    
   completions: 1    
