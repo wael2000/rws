@@ -67,6 +67,7 @@ metadata:
   name: dashboard-ui
   labels:
     app: dashboard-ui
+    app.kubernetes.io/part-of: dashboard-app    
 spec:
   replicas: 1
   selector:
