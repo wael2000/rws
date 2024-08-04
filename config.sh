@@ -102,5 +102,5 @@ oc create -f cluster-secrets.yaml -n hub-ns
 # placement/apps-placement.yaml
 # placement/location-placement.yaml
 
-oc reate -f apps-placement.yaml
-oc reate -f location-placement.yaml
+oc create -f apps-placement.yaml
+oc create -f location-placement.yaml
