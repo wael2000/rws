@@ -40,53 +40,34 @@
 
             <div class="header-menu">
 
-                <div class="col-sm-7">
+                <div class="col-sm-6">
                     <div class="header-left">
                         <h5 class="menu-title"> 
-                        <img class="align-self-center rounded-circle mr-3" src="images/redhat.png"/>
                         <img class="align-self-center rounded-circle mr-3" src="images/dora.png"/>
                         Digital Operational Resilience Act </h5>
                     </div>
                 </div>
-
-                <div class="col-sm-5">
-                    <div class="user-area dropdown float-right">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img class="user-avatar rounded-circle" src="images/admin.jpg" alt="User Avatar">
+                <div class="col-sm-4">
+                    <!-- policy summary -->
+                    <div class="compliance-area dropdown">
+                        <a href="#" class="dropdown-toggle compliance-info" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img class="rounded-circle compliance-avatar" src="images/grc.png" alt="GRC">
                         </a>
 
-                        <div class="user-menu dropdown-menu">
-                            <a class="nav-link" href="#"><i class="fa fa-user"></i> My Profile</a>
-
-                            <a class="nav-link" href="#"><i class="fa fa-user"></i> Notifications <span class="count">13</span></a>
-
-                            <a class="nav-link" href="#"><i class="fa fa-cog"></i> Settings</a>
-
-                            <a class="nav-link" href="#"><i class="fa fa-power-off"></i> Logout</a>
+                        <div class="dropdown-menu compliance-menu">
+                            <a ng-repeat="policy in policies" class="nav-link" href="#" data-toggle="modal" ng-click="prePolicyModal(policy)" data-target="#policymodal">
+                            <i class="fa fa-thumbs-{{policy.status.compliant == 'Compliant'?'up':'down'}}"></i>
+                            {{ policy.metadata.name }} </a>
                         </div>
                     </div>
-
-                    <div class="language-select dropdown" id="language-select">
-                        <a class="dropdown-toggle" href="#" data-toggle="dropdown"  id="language" aria-haspopup="true" aria-expanded="true">
-                            <i class="flag-icon flag-icon-us"></i>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="language">
-                            <div class="dropdown-item">
-                                <span class="flag-icon flag-icon-fr"></span>
-                            </div>
-                            <div class="dropdown-item">
-                                <i class="flag-icon flag-icon-es"></i>
-                            </div>
-                            <div class="dropdown-item">
-                                <i class="flag-icon flag-icon-us"></i>
-                            </div>
-                            <div class="dropdown-item">
-                                <i class="flag-icon flag-icon-it"></i>
-                            </div>
-                        </div>
-                    </div>
-
+                    
                 </div>
+                <div class="col-sm-2">
+                     <div class="compliance-area dropdown float-right">
+                        <img class="align-self-center rounded-circle mr-3" src="images/redhat.png"/>
+                     </div>
+                </div>
+
             </div>
 
         </header><!-- /header -->
@@ -122,7 +103,7 @@
                         <div class="fa fa-spinner wtt-mark"></div>
                         
                         <div class="media">
-                            <a href="#"><img class="align-self-center rounded-circle mr-3" style="width:85px; height:85px;" alt="" src="images/{{ object.name }}.png"></a>
+                            <a href="#"><img class="align-self-center rounded-circle mr-3" style="width:85px; height:85px;" alt="" ng-src="images/{{ object.name }}.png"></a>
                             <div class="media-body">
                                 <h2 class="text-white display-6 capitalize">{{ object.name }}</h2>
                                 <p class="text-light">{{ object.description }}</p>
@@ -198,6 +179,48 @@
 
     <!-- Right Panel -->
 
+    <!-- Modal Forms -->
+    <!-- Compliance modal -->
+    <div class="modal fade" id="policymodal" tabindex="-1" role="dialog" aria-labelledby="policymodalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="policymodalLabel">Policy View</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form class="">
+                    <div class="modal-body">
+                        <div class="form-group"><label for="nf-policy" class=" form-control-label">Policy</label>
+                            <span class="form-control">{{ currentPolicy.metadata.name }}</span>
+                        </div>
+                        <div class="form-group"><label for="nf-controls" class=" form-control-label">Controls</label>
+                            <span class="form-control">{{ currentPolicy.metadata.annotations['policy.open-cluster-management.io/controls'] }}</span>
+                        </div>
+                        <div class="form-group"><label for="nf-standards" class=" form-control-label">Standards</label>
+                            <span class="form-control">{{ currentPolicy.metadata.annotations['policy.open-cluster-management.io/standards'] }}</span>
+                        </div>
+                        <h5> Status </h5>
+                        <div ng-repeat="status in currentPolicy.status.status" class="row form-group">
+                            <div class="col col-md-2">
+                                <label for="nf-status" class=" form-control-label">{{ status.clustername }}</label>
+                            </div>
+                            <div class="col col-md-6">
+                                <span class="form-control"><i class="fa fa-thumbs-{{status.compliant == 'Compliant'?'up':'down'}}"></i> {{ status.compliant }}</span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+    <!-- Compliance modal -->
+
     <script src="vendors/jquery/dist/jquery.min.js"></script>
     <script src="vendors/popper.js/dist/umd/popper.min.js"></script>
     <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -245,6 +268,7 @@
             $scope.department=null;
             _refreshPageData();
 
+            // provisioning and app deployment 
             function _refreshPageData() {
                 var method = "GET";
                 var url = 'http://{composite}/department';
@@ -349,6 +373,32 @@
                 };
             } 
 
+            // Policy and Compliance
+            $scope.policies=[];
+            $scope.currentPolicy=null;
+            _refreshPolicy();
+            function _refreshPolicy() {
+                var method = "GET";
+                var url = 'http://{composite}/department/policy';
+                $http({
+                    method: method,
+                    url: url,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin' : '*'
+                    }
+                }).then(function successCallback(response) {
+                    $scope.policies = response.data.items;
+                    //console.log(response.data);
+                }, function errorCallback(response) {
+                    console.log(response.statusText);
+                });
+            }
+            
+            $scope.prePolicyModal = function(policy){
+                $scope.currentPolicy = policy;
+            }
+            
         });
 
 

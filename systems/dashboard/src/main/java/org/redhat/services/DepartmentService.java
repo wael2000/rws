@@ -20,7 +20,6 @@ public class DepartmentService {
     @Inject
     EntityManager em; 
 
-
     public Department[] getAll(){
         return em.createNamedQuery("Department.findAll", Department.class)
                 .getResultList().toArray(new Department[0]);

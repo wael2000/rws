@@ -1,10 +1,10 @@
 package org.redhat.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -21,6 +21,7 @@ import org.redhat.services.BuildPipelineProxyService;
 import org.redhat.services.OpsPipelineProxyService;
 import org.redhat.services.AzurePipelineProxyService;
 import org.redhat.services.PipelineProxyService;
+import org.redhat.services.PolicyProxyService;
 
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -49,6 +50,13 @@ public class DepartmentController {
     @Inject
     @RestClient
     BuildPipelineProxyService builsPipelineProxyService;
+
+    @Inject
+    @RestClient
+    PolicyProxyService policyProxyService;
+
+    //@Inject
+    //private OpenShiftClient openshiftClient;
 
     @GET
     @Path("/")
@@ -262,6 +270,17 @@ public class DepartmentController {
             paramMap.put(key, value);
         }
         return paramMap;
+    }
+
+    @ConfigProperty(name = "ocp.token" , defaultValue="" )
+    String ocptoken;
+
+    @GET
+    @Path("/policy")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Object getPolicy() {
+        return policyProxyService.getPolicies1("Bearer " + ocptoken);
+        //return openshiftClient.pods().inNamespace("hub-ns").list().getItems();
     }
 
 }   

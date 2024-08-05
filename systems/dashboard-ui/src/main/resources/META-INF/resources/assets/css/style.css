@@ -7356,3 +7356,60 @@ header .form-inline .search-form.close {
     opacity: 0;
   }
 }
+
+
+.compliance-area {
+  padding-right: 0;
+  position: relative;
+}
+
+.compliance-area .compliance-menu {
+  background: #fff;
+  border: none;
+  font-family: 'Open Sans';
+  right: 0;
+  top: 55px !important;
+  margin: 0;
+  max-width: 250px;
+  padding: 5px 10px;
+  position: absolute;
+  width: 100%;
+  z-index: 999;
+  min-width: 150px;
+}
+
+.compliance-area .compliance-menu .nav-link {
+  color: #272c33;
+  display: block;
+  font-size: 14px;
+  line-height: 22px;
+  padding: 5px 0;
+}
+
+.compliance-area .compliance-avatar {
+  width: 56px;
+}
+
+.compliance-area .compliance-info .name {
+  margin-top: 4px;
+  color: #8c8c8c;
+  font-size: 14px;
+  position: relative;
+}
+
+.compliance-area .count {
+  background: #d9534f;
+  border-radius: 50%;
+  color: #fff;
+  font-family: 'Open Sans';
+  font-size: 9px;
+  font-weight: 700;
+  height: 20px;
+  width: 20px;
+  line-height: 20px;
+  text-align: center;
+}
+
+.compliance-area .dropdown-toggle:after {
+  display: none;
+}

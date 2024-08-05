@@ -116,6 +116,12 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-container-image-jib</artifactId>
     </dependency>
+    <!--
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-openshift-client</artifactId>
+    </dependency>
+    -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
@@ -131,7 +137,7 @@
       <artifactId>testcontainers</artifactId>
       <version>1.9.1</version>
       <scope>test</scope>
-  </dependency>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
