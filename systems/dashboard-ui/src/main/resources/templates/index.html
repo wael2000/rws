@@ -195,6 +195,9 @@
                         <div class="form-group"><label for="nf-policy" class=" form-control-label">Policy</label>
                             <span class="form-control">{{ currentPolicy.metadata.name }}</span>
                         </div>
+                        <div class="form-group"><label for="nf-controls" class=" form-control-label">Details</label>
+                            <span class="form-control">{{ currentPolicy.metadata.annotations['policy.open-cluster-management.io/description'] }}</span>
+                        </div>
                         <div class="form-group"><label for="nf-controls" class=" form-control-label">Controls</label>
                             <span class="form-control">{{ currentPolicy.metadata.annotations['policy.open-cluster-management.io/controls'] }}</span>
                         </div>
