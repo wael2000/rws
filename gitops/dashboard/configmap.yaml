@@ -11,3 +11,4 @@ data:
   build.pipeline.el: http://dummy
   department.url: dashboard-hub-ns.apps.cluster-sql9s.sql9s.sandbox1778.opentlc.com
   ocp.token: NA
+  policy.url: https://api.cluster-sql9s.sql9s.sandbox1778.opentlc.com:6443/apis/policy.open-cluster-management.io/v1/namespaces/openshift-gitops/policies
