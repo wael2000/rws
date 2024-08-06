@@ -49,6 +49,11 @@ spec:
                 configMapKeyRef:
                   name: dashboard-config
                   key: ocp.token
+            - name: policy.url
+              valueFrom:
+                configMapKeyRef:
+                  name: dashboard-config
+                  key: policy.url
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
