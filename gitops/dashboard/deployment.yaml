@@ -44,6 +44,11 @@ spec:
                 configMapKeyRef:
                   name: dashboard-config
                   key: build.pipeline.el
+            - name: ocp.token
+              valueFrom:
+                configMapKeyRef:
+                  name: dashboard-config
+                  key: ocp.token
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
