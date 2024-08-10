@@ -87,9 +87,9 @@ oc expose svc el-azure-event-listener
 
 oc get route | grep el-
 # update the dashboard-config configmap with route values 
-# el-application-event-listener-hub-ns.apps.cluster-sql9s.sql9s.sandbox1778.opentlc.com
-# el-azure-event-listener-hub-ns.apps.cluster-sql9s.sql9s.sandbox1778.opentlc.com
-# el-provisioning-event-listener-hub-ns.apps.cluster-sql9s.sql9s.sandbox1778.opentlc.com
+# el-application-event-listener-hub-ns.apps.cluster-sql9s.sql9s.[Base DNS Domain]
+# el-azure-event-listener-hub-ns.apps.cluster-sql9s.sql9s.[Base DNS Domain]
+# el-provisioning-event-listener-hub-ns.apps.cluster-sql9s.sql9s.[Base DNS Domain]
 
 # you need to create env secrets
 # you can use base64 online site https://emn178.github.io/online-tools/base64_encode.html

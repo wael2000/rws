@@ -12,7 +12,7 @@ oc create sa hub-apis
 oc create token hub-apis
 # a secret will be created with the token that can be used fot he API calls (hub-apis-token-XXXXX)
 oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:hub-ns:hub-apis
-# curl -k -H "Authorization: Bearer TOOKEN" "https://api.cluster-sql9s.sql9s.sandbox1778.opentlc.com:6443/apis/policy.open-cluster-management.io/v1/namespaces/openshift-gitops/policies/hub-ns"
+# curl -k -H "Authorization: Bearer TOOKEN" "https://api.cluster-sql9s.sql9s.[Base DNS Domain]:6443/apis/policy.open-cluster-management.io/v1/namespaces/openshift-gitops/policies/hub-ns"
 
 
 

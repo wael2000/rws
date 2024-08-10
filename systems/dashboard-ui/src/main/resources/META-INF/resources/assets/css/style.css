@@ -7369,13 +7369,15 @@ header .form-inline .search-form.close {
   font-family: 'Open Sans';
   right: 0;
   top: 55px !important;
+  left: -250px !important;
   margin: 0;
-  max-width: 250px;
+  max-width: 800px;
   padding: 5px 10px;
   position: absolute;
   width: 100%;
   z-index: 999;
-  min-width: 150px;
+  min-width: 600px;
+  border: #A5A5A5 1px dotted;
 }
 
 .compliance-area .compliance-menu .nav-link {

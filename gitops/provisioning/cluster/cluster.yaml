@@ -1,3 +1,4 @@
+# you need to change baseDomain with ENV [Base DNS Domain]
 apiVersion: hive.openshift.io/v1
 kind: ClusterDeployment
 metadata:
@@ -9,7 +10,7 @@ metadata:
     vendor: OpenShift
     cluster.open-cluster-management.io/clusterset: default
 spec:
-  baseDomain: sandbox1778.opentlc.com
+  baseDomain: sandbox1105.opentlc.com
   clusterName: NAMESPACE-cluster
   controlPlaneConfig:
     servingCertificates: {}

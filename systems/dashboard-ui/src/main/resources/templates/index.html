@@ -53,11 +53,21 @@
                         <a href="#" class="dropdown-toggle compliance-info" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img class="rounded-circle compliance-avatar" src="images/grc.png" alt="GRC">
                         </a>
-
                         <div class="dropdown-menu compliance-menu">
-                            <a ng-repeat="policy in policies" class="nav-link" href="#" data-toggle="modal" ng-click="prePolicyModal(policy)" data-target="#policymodal">
-                            <i class="fa fa-thumbs-{{policy.status.compliant == 'Compliant'?'up':'down'}}"></i>
-                            {{ policy.metadata.name }} </a>
+                            <div class="col col-sm-6">
+                            <strong>Available Policies</strong>
+                                <a ng-repeat="policy in policies" ng-if='policy.spec.disabled==true' class="nav-link" href="#" data-toggle="modal" ng-click="prePolicyModal(policy)" data-target="#policymodal">
+                                    <i class="fa fa-play"></i>
+                                    {{ policy.metadata.name }} 
+                                </a>
+                            </div>
+                            <div class="col col-sm-6">
+                            <strong>Active Policies</strong>
+                                <a ng-repeat="policy in policies" ng-if='policy.spec.disabled==false' class="nav-link" href="#" data-toggle="modal" ng-click="prePolicyModal(policy)" data-target="#policymodal">
+                                    <i class="fa fa-thumbs-{{policy.status.compliant == 'Compliant'?'up':'down'}}"></i>
+                                    {{ policy.metadata.name }} 
+                                </a>
+                            </div>
                         </div>
                     </div>
                     
