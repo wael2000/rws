@@ -46,9 +46,9 @@ spec:
                   key: build.pipeline.el
             - name: ocp.token
               valueFrom:
-                configMapKeyRef:
-                  name: dashboard-config
-                  key: ocp.token
+                secretKeyRef:
+                  name: hub-apis-token
+                  key: token
             - name: policy.url
               valueFrom:
                 configMapKeyRef:
