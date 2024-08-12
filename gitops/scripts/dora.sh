@@ -16,6 +16,7 @@ AZURE_PWD=VEZjh2CvtKnPsi47
 AZURE_TOKEN=eyJhbGciOiJSUzI1NiIsImtpZCI6InhRbmpudFBWZVVIMXNtaFhZMUEya0dCM2JkU2tuUEZJNFZSLWRwaDhaUk0ifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJodWItbnMiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlY3JldC5uYW1lIjoicmhzaS10b2tlbi1nNXFkYyIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50Lm5hbWUiOiJyaHNpIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiNzAzNDA0YTYtMjdlZC00ZGYwLTgyOGItZDIzZjA0YzgyZDFmIiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omh1Yi1uczpyaHNpIn0.avMT7q9nzJH15rk8J4YVuEzbnEpQDAA7cRqhWYEIR_M7k1S5wcqPc0BOfoMBXDV-4ykdesg04AgNYFJ13OgSq27l3g5FPM_nf1CtiExKofv00XdRT2tPI2JVxagRzPfMeJ4ljAQsBZbUkZ6JG6-6XyAQ6Mf3B3UeGlhiPqv56bNW7ed3-27tkzq6R_G2szvRJ0wK_x83ReZjJUFIVHYMRtWU_MVgIM8xUI8_qBP-JBTImpOA6sGW9Gt7uWmUTzmitzhBzXeBfVKxuRmCrFx6B2vLxRDnld_FH6_EYk5_f1Qz5RBqfFeloA_GzF4StVEUnLzPlHwncdiPrj24xiVVt9zYDIhuQhvI3wEwVDGvM2PavRLBDRYuNSdRbhcmkMpMdqcsWSGCvrMunJDqVjEO4jRndOVnOOnulxTEVvfyCbcviaGEMDHNKaDxPU4GtwrqXYREy8NRyYtR6gTTqKqqUrgFNFpOgDfjLCmT45wMW8mhekoWCrUMymcxXKa2Gxp2zbZppPwVJG2EvB44Lfa0YjWoizpIz6Jznf7-YYQEGNMDJqRoLhxMFvuWcdaPtJ5RwkDpnZDyTHjC97HvqfVYJlXPInqKpheO_g5D5357yy8kAEWrNu3X42SXMRidTdlwb20T0DfDutpjmiGomn_wi9m_2W--PkICrUGRDoXARVg
 AZURE_STATUS=off
 
+AZURE_NATIVE_STATUS=on
 
 PROJECT=pss
 
@@ -98,6 +99,7 @@ do
 MSG=""
 read n
 case $n in
+
 "1")
 # DC
 if [[ $DC_STATUS == "on" ]] 
@@ -136,10 +138,14 @@ fi
 
 "4")
 # Azure Native DB
-oc login --server=$DC_URL -u $DC_UID -p $DC_PWD --insecure-skip-tls-verify=true
-oc project $PROJECT-azure
-skupper init --enable-console --enable-flow-collector --console-auth unsecured --site-name azure-native-site
-menu_array["4"]="\033[43m4) init\033[0m"
+if [[ $AZURE_NATIVE_STATUS == "on" ]]
+then
+  oc login --server=$DC_URL -u $DC_UID -p $DC_PWD --insecure-skip-tls-verify=true
+  #oc project $PROJECT-azure
+  oc project azure-native
+  skupper init --enable-console --enable-flow-collector --console-auth unsecured --site-name azure-native-site
+  menu_array["4"]="\033[43m4) init\033[0m"
+fi
 ;;
 
 

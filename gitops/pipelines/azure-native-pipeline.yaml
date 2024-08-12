@@ -8,6 +8,9 @@ spec:
       description: action
       name: action
       type: string
+    - default: pss
+      name: department
+      type: string      
   tasks:
     - name: git-clone
       params:

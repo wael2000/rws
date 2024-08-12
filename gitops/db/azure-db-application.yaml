@@ -4,7 +4,7 @@ metadata:
   name: azure-db
 spec:
   destination:
-    namespace: azure-native
+    namespace: DEPARTMENT-azure
     server: https://kubernetes.default.svc
   project: default
   source:
