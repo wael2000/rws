@@ -141,8 +141,7 @@ fi
 if [[ $AZURE_NATIVE_STATUS == "on" ]]
 then
   oc login --server=$DC_URL -u $DC_UID -p $DC_PWD --insecure-skip-tls-verify=true
-  #oc project $PROJECT-azure
-  oc project azure-native
+  oc project $PROJECT-azure
   skupper init --enable-console --enable-flow-collector --console-auth unsecured --site-name azure-native-site
   menu_array["4"]="\033[43m4) init\033[0m"
 fi
@@ -234,6 +233,7 @@ menu_array["8"]="8) bind service"
 # Link All
 if [[ $AWS_STATUS == "on" ]] 
 then
+  echo "---- AWS ----"
   oc login --server=$AWS_URL -u $AWS_UID -p $AWS_PWD --insecure-skip-tls-verify=true
   oc project $PROJECT
   skupper link create aws_to_dc.token --name aws-to-dc
@@ -241,22 +241,25 @@ fi
 
 if [[ $AZURE_STATUS == "on" ]] 
 then
+  echo "---- AZURE ----"
   oc login --server=$AZURE_URL -u $AZURE_UID -p $AZURE_PWD --insecure-skip-tls-verify=true
   oc project $PROJECT
   skupper link create azure_to_dc.token --name azure-to-dc
 fi
 
-if [[ $DC_STATUS == "on" ]] 
+if [[ $AZURE_NATIVE_STATUS == "on" ]] 
 then
+  echo "---- AZURE-NATIVE ----"
   oc login --server=$DC_URL -u $DC_UID -p $DC_PWD --insecure-skip-tls-verify=true
-  #oc project $PROJECT-azure
-  #skupper link create azure_native_to_dc.token --name azure-native-to-dc
+  oc project $PROJECT-azure
+  skupper link create azure_native_to_dc.token --name azure-native-to-dc
 fi  
 ;;
 
 
 "e")
 # DC : Expose db service
+# Make sure you remove local svc for postgresql and rtgs-apis
 oc login --server=$DC_URL -u $DC_UID -p $DC_PWD --insecure-skip-tls-verify=true
 oc project $PROJECT
 skupper service create postgresql 5432 --protocol tcp
