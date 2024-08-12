@@ -90,3 +90,17 @@ spec:
                   phase: Succeeded
           pruneObjectBehavior: None
   remediationAction: inform
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: compliance-operator-placement-binding
+  namespace: openshift-gitops
+placementRef:
+  name: all-clusters-placement
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: compliance-operator
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
