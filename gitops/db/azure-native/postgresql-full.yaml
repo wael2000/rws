@@ -23,7 +23,7 @@ kind: PostgreSQLDatabase
 metadata:
   name: fsi
 spec:
-  resourceGroup:openenv-85gsq
+  resourceGroup: openenv-85gsq
   server: postgresqlserver-fsi
 ---
 apiVersion: azure.microsoft.com/v1alpha2
