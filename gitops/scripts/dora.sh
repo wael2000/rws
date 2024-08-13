@@ -162,6 +162,7 @@ menu_array["9"]="9) unbind service"
 # bind service on AWS
 oc login --server=$AWS_URL -u $AWS_UID -p $AWS_PWD --insecure-skip-tls-verify=true
 oc project $PROJECT
+skupper service bind rtgs-apis service rtgs-apis-rhsi
 skupper service bind postgresql service postgresqldb
 menu_array["6"]="\033[43m6) bind service\033[0m"
 menu_array["10"]="10) unbind service"
@@ -180,6 +181,10 @@ menu_array["11"]="11) unbind service"
 "8")
 # bind Azure Native DB
 oc login --server=$DC_URL -u $DC_UID -p $DC_PWD --insecure-skip-tls-verify=true
+# api from dc
+oc project $PROJECT
+skupper service bind rtgs-apis service rtgs-apis-rhsi
+# db from Azure native
 oc project $PROJECT-azure
 skupper service bind postgresql service azure-postgresql-service
 menu_array["8"]="\033[43m8) bind service\033[0m"
