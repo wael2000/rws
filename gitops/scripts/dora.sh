@@ -69,7 +69,7 @@ print_fixed_line() {
 
 
 menu (){
-clear
+#clear
 print_fixed_line
 echo "                              ┏   ┏┓        ┓┏  ┓   • ┓  ┏┓┓     ┓   ┓"
 echo "           _\|/_             ━┫   ┃┃┏┓┏┓┏┓  ┣┫┓┏┣┓┏┓┓┏┫  ┃ ┃┏┓┓┏┏┫   ┣━"
@@ -274,9 +274,6 @@ then
   skupper delete
 fi
 
-#oc project $PROJECT-azure
-
-skupper delete
 if [[ $AWS_STATUS == "on" ]] 
 then
   oc login --server=$AWS_URL -u $AWS_UID -p $AWS_PWD --insecure-skip-tls-verify=true
@@ -290,7 +287,17 @@ then
   oc project $PROJECT
   skupper delete
 fi
+
+if [[ $AZURE_NATIVE_STATUS == "on" ]] 
+then
+  oc login --server=$DC_URL -u $DC_UID -p $DC_PWD --insecure-skip-tls-verify=true
+  oc project $PROJECT-azure
+  skupper delete
+fi
+
 ;;
+
+
 
 "c1")
 MSG="[c1] Business continuity policies and disaster recovery plans as a C-level responsibility"
