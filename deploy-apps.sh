@@ -15,6 +15,18 @@ oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:hub-n
 # curl -k -H "Authorization: Bearer TOOKEN" "https://api.cluster-sql9s.sql9s.[Base DNS Domain]:6443/apis/policy.open-cluster-management.io/v1/namespaces/openshift-gitops/policies/hub-ns"
 
 
+# create hub-apis-token secret
+cat <<EOF | oc apply -f -
+kind: Secret
+apiVersion: v1
+metadata:
+  name: hub-apis-token
+  namespace: hub-ns
+data:
+  token: HUB-API-SA-TOKEN
+type: Opaque
+EOF
+
 
 
 # delete 
