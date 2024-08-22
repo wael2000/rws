@@ -10,5 +10,5 @@ data:
   azure.pipeline.el: http://el-azure-event-listener-hub-ns.apps.cluster-cmlmj.cmlmj.sandbox2812.opentlc.com
   build.pipeline.el: http://dummy
   department.url: dashboard-hub-ns.apps.cluster-cmlmj.cmlmj.sandbox2812.opentlc.com
-  ocp.token: NA
+  #ocp.token: NA
   policy.url: https://api.cluster-cmlmj.cmlmj.sandbox2812.opentlc.com:6443/apis/policy.open-cluster-management.io/v1/namespaces/openshift-gitops/policies
