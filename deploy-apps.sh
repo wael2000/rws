@@ -28,6 +28,5 @@ type: Opaque
 EOF
 
 
-
 # delete 
 #oc delete  -f dashboard-applicationset.yaml -n openshift-gitops

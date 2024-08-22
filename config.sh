@@ -83,6 +83,22 @@ oc create sa rhsi -n hub-ns
 oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:hub-ns:rhsi
 
 
+# create pipelines 
+oc create -f gitops/pipelines/tasks/provision-callback.yaml
+oc create -f gitops/pipelines/tasks/deployment-callback.yaml
+
+oc create -f gitops/pipelines/provisioning-pipeline.yaml \
+          -f gitops/pipelines/provisioning-pipeline-template.yaml \
+          -f gitops/pipelines/provisioning-pipeline-triggerbinding.yaml \
+          -f gitops/pipelines/provisioning-pipeline-eventlistener.yaml 
+
+oc create -f gitops/pipelines/application-pipeline.yaml \
+          -f gitops/pipelines/application-pipeline-template.yaml \
+          -f gitops/pipelines/application-pipeline-triggerbinding.yaml \
+          -f gitops/pipelines/application-pipeline-eventlistener.yaml 
+
+oc create -f gitops/pipelines/azure-native-pipeline.yaml
+
 # once pipelines created, we need to expose the evernt listener svc
 oc expose svc el-application-event-listener
 oc expose svc el-provisioning-event-listener

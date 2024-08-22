@@ -10,7 +10,7 @@ metadata:
     vendor: OpenShift
     cluster.open-cluster-management.io/clusterset: default
 spec:
-  baseDomain: sandbox1105.opentlc.com
+  baseDomain: sandbox2812.opentlc.com
   clusterName: NAMESPACE-cluster
   controlPlaneConfig:
     servingCertificates: {}
