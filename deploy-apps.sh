@@ -17,6 +17,5 @@ oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:hub-n
 
 
 
-
 # delete 
 #oc delete  -f dashboard-applicationset.yaml -n openshift-gitops

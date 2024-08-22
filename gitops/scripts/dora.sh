@@ -69,7 +69,7 @@ print_fixed_line() {
 
 
 menu (){
-#clear
+clear
 print_fixed_line
 echo "                              ┏   ┏┓        ┓┏  ┓   • ┓  ┏┓┓     ┓   ┓"
 echo "           _\|/_             ━┫   ┃┃┏┓┏┓┏┓  ┣┫┓┏┣┓┏┓┓┏┫  ┃ ┃┏┓┓┏┏┫   ┣━"

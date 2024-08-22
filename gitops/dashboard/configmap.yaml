@@ -5,10 +5,10 @@ metadata:
   #annotations:
   #  argocd.argoproj.io/sync-wave: "1"
 data:
-  pipeline.el: http://el-provisioning-event-listener-hub-ns.apps.cluster-vtflb.vtflb.sandbox1105.opentlc.com
-  ops.pipeline.el: http://el-application-event-listener-hub-ns.apps.cluster-vtflb.vtflb.sandbox1105.opentlc.com
-  azure.pipeline.el: http://el-azure-event-listener-hub-ns.apps.cluster-vtflb.vtflb.sandbox1105.opentlc.com
+  pipeline.el: http://el-provisioning-event-listener-hub-ns.apps.cluster-cmlmj.cmlmj.sandbox2812.opentlc.com
+  ops.pipeline.el: http://el-application-event-listener-hub-ns.apps.cluster-cmlmj.cmlmj.sandbox2812.opentlc.com
+  azure.pipeline.el: http://el-azure-event-listener-hub-ns.apps.cluster-cmlmj.cmlmj.sandbox2812.opentlc.com
   build.pipeline.el: http://dummy
-  department.url: dashboard-hub-ns.apps.cluster-vtflb.vtflb.sandbox1105.opentlc.com
-  ocp.token: NA
-  policy.url: https://api.cluster-vtflb.vtflb.sandbox1105.opentlc.com:6443/apis/policy.open-cluster-management.io/v1/namespaces/openshift-gitops/policies
+  department.url: dashboard-hub-ns.apps.cluster-cmlmj.cmlmj.sandbox2812.opentlc.com
+  ocp.token: 
+  policy.url: https://api.cluster-cmlmj.cmlmj.sandbox2812.opentlc.com:6443/apis/policy.open-cluster-management.io/v1/namespaces/openshift-gitops/policies

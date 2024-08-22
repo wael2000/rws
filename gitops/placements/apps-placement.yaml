@@ -13,7 +13,7 @@ spec:
             - key: provider
               operator: In
               values:
-                - dc
+                - none
 ---
 apiVersion: cluster.open-cluster-management.io/v1beta1
 kind: Placement
@@ -30,7 +30,7 @@ spec:
             - key: provider
               operator: In
               values:
-                - dc
+                - none
 ---
 apiVersion: cluster.open-cluster-management.io/v1beta1
 kind: Placement
@@ -47,7 +47,7 @@ spec:
             - key: provider
               operator: In
               values:
-                - dc
+                - none
 ---
 apiVersion: cluster.open-cluster-management.io/v1beta1
 kind: Placement
@@ -64,7 +64,7 @@ spec:
             - key: provider
               operator: In
               values:
-                - dc
+                - none
 ---
 apiVersion: cluster.open-cluster-management.io/v1beta1
 kind: Placement
@@ -81,4 +81,4 @@ spec:
             - key: provider
               operator: In
               values:
-                - dc
+                - none

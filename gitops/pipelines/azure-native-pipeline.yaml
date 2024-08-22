@@ -9,8 +9,9 @@ spec:
       name: action
       type: string
     - default: pss
+      description: Department
       name: department
-      type: string      
+      type: string
   tasks:
     - name: git-clone
       params:
@@ -60,7 +61,7 @@ spec:
     - name: deploy-azure-service
       params:
         - name: SCRIPT
-          value: oc create -f gitops/db/azure-db-application.yaml -n openshift-gitops
+          value: sed -e 's/DEPARTMENT/$(params.department)/g' gitops/db/azure-db-application.yaml | oc create -f - -n openshift-gitops
         - name: VERSION
           value: latest
       runAfter:
@@ -76,6 +77,17 @@ spec:
       workspaces:
         - name: manifest-dir
           workspace: source
+    - name: add-ns-to-gitops
+      params:
+        - name: SCRIPT
+          value: oc label ns $(params.department)-azure argocd.argoproj.io/managed-by=openshift-gitops --overwrite
+        - name: VERSION
+          value: latest
+      runAfter:
+        - deploy-azure-service
+      taskRef:
+        kind: ClusterTask
+        name: openshift-client
   workspaces:
     - name: source
 ---
