@@ -33,3 +33,13 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - PruneLast=true
+        ignoreDifferences:
+          # Exclude the entire Service object from sync
+          - group: ""
+            kind: Service
+            name: SYSTEM-apis
+            namespace: DEPARTMENT
+          - group: ""
+            kind: Service
+            name: SYSTEM-ui
+            namespace: DEPARTMENT

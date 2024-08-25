@@ -126,4 +126,4 @@ oc create -f location-placement.yaml
 
 # create azuer native on DC cluster 
 # namespace per department 
-oc create 
+oc create pss-azure
