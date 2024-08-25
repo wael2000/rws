@@ -34,3 +34,8 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - PruneLast=true
+        ignoreDifferences:
+          - group: ""
+            kind: Service
+            name: postgresql
+            namespace: DEPARTMENT          
