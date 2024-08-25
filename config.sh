@@ -123,3 +123,7 @@ oc create -f cluster-secrets.yaml -n hub-ns
 
 oc create -f apps-placement.yaml
 oc create -f location-placement.yaml
+
+# create azuer native on DC cluster 
+# namespace per department 
+oc create 
