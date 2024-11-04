@@ -121,9 +121,14 @@ oc create -f cluster-secrets.yaml -n hub-ns
 # placement/apps-placement.yaml
 # placement/location-placement.yaml
 
-oc create -f apps-placement.yaml
-oc create -f location-placement.yaml
+oc create -f gitops/placements/apps-placement.yaml
+oc create -f gitops/placements/location-placement.yaml
+
+# create following GitOpsCluster and its binding and placement 
+oc create -f gitops/placements/argocd-placement.yaml
+
+
 
 # create azuer native on DC cluster 
 # namespace per department 
-oc create pss-azure
+# oc create pss-azure
