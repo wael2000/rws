@@ -10,7 +10,7 @@ oc adm groups add-users cluster-admins admin
 oc label ns hub-ns argocd.argoproj.io/managed-by=openshift-gitops --overwrite
 
 # same for azure-native
-oc label ns azure-native argocd.argoproj.io/managed-by=openshift-gitops --overwrite
+# oc label ns azure-native argocd.argoproj.io/managed-by=openshift-gitops --overwrite
 
 #pipeline
 oc policy add-role-to-user admin system:serviceaccount:hub-ns:pipeline -n openshift-gitops
