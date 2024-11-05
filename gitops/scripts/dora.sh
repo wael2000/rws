@@ -70,6 +70,7 @@ print_fixed_line() {
 
 
 menu (){
+sleep 2s
 clear
 print_fixed_line
 echo "                              ┏   ┏┓        ┓┏  ┓   • ┓  ┏┓┓     ┓   ┓"
@@ -209,6 +210,7 @@ menu_array["5"]="5) bind service"
 # unbind service on AWS
 oc login --server=$AWS_URL -u $AWS_UID -p $AWS_PWD --insecure-skip-tls-verify=true
 oc project $PROJECT
+skupper service unbind rtgs-apis service rtgs-apis-rhsi
 skupper service unbind postgresql service postgresqldb
 menu_array["10"]="\033[43m10) unbind service\033[0m"
 menu_array["6"]="6) bind service"
