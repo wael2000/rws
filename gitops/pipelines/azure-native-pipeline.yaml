@@ -80,7 +80,8 @@ spec:
     - name: add-ns-to-gitops
       params:
         - name: SCRIPT
-          value: oc label ns $(params.department)-azure argocd.argoproj.io/managed-by=openshift-gitops --overwrite
+          #value: oc label ns $(params.department)-azure argocd.argoproj.io/managed-by=openshift-gitops --overwrite
+          value: oc label ns azure-native argocd.argoproj.io/managed-by=openshift-gitops --overwrite
         - name: VERSION
           value: latest
       runAfter:
