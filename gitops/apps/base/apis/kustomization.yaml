@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
 - deployment.yaml
 # delete service when you enable RHSI
-- service.yaml
+# - service.yaml
 - service-rhsi.yaml
