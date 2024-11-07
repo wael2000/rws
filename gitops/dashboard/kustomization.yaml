@@ -2,6 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
 - ../db/dc
+# explicitely add the service object as part of the GitOps scope
+- ../db/base/db-service.yaml
 - configmap.yaml
 - deployment.yaml
 - service.yaml
