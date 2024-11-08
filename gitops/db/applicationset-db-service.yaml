@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: LOCATION-DEPARTMENT-db
+  name: LOCATION-DEPARTMENT-db-svc
   namespace: openshift-gitops
 spec:
   generators:
@@ -23,7 +23,7 @@ spec:
         - repositoryType: git
           repoURL: https://github.com/wael2000/dora.git
           targetRevision: main
-          path: gitops/db/LOCATION
+          path: gitops/db/service-layer
       destination:
         namespace: DEPARTMENT
         server: "{{server}}"
@@ -34,8 +34,3 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - PruneLast=true
-#        ignoreDifferences:
-#          - group: ""
-#            kind: Service
-#            name: postgresql
-#            namespace: DEPARTMENT          
