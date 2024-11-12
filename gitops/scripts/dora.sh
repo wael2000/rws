@@ -23,6 +23,7 @@ PROJECT=pss
 MSG="Welcome to Red Hat Dora Demo"
 RESULT=""
 
+# set path to skupper and oc cli
 alias skupper=~/Documents/openshift/skupper
 alias oc=~/Documents/openshift/oc
 
