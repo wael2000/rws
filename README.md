@@ -1,31 +1,19 @@
-# dora
+# Operational Resilience Testing Demo
+### _OpenShift, OpenShift GitOps, OpenShift Pipelines, RHACM, RHSI, AWS, Azure, Azure Service Operator_
 
-# Before proceeding with the cluster provisioning we need to create following configmaps in openshift-gitops ns
+with the help of following objects.
+- ClusterSet
+- ManagedCluster
+- Placement
+- ApplicationSet
+- Application
+- Policy
 
-# create the same from RHACM UI
+## Features
 
-
-acm-placement
-
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: acm-placement
-data:
-  apiVersion: cluster.open-cluster-management.io/v1beta1
-  kind: placementdecisions
-  matchKey: clusterName
-  statusListKey: decisions
-
-
-acm-placementrule
-
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: acm-placementrule
-data:
-  apiVersion: apps.open-cluster-management.io/v1
-  kind: placementrules
-  matchKey: clusterName
-  statusListKey: decisions
+- Infrastructure Provisioning  (DataCenter, AWS, Azure, Cloud native services)
+- Team onboarding (Physical and Logical segregation)
+- High Availability across Hybrid infrastructure
+- Service Resiliency
+- Site Resiliency 
+- Incident reporting (Governance, Policy & Audit)
