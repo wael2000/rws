@@ -46,9 +46,14 @@ oc adm policy \
     add-cluster-role-to-user self-provisioner \
     system:serviceaccount:hub-ns:pipeline
 
-# Start: We usually use web console for this 
 # install operators
+# Start: We usually use web console for this 
 # Gitops
+# pipelines
+# Azure services operator
+# Service interconnect
+
+
 oc create ns openshift-gitops-operator
 oc label namespace openshift-gitops-operator openshift.io/cluster-monitoring=true
 
@@ -77,11 +82,12 @@ spec:
 EOF
 # End: We usually use web console for this 
 
+
+
 # creaet SA account
 
 oc create sa rhsi -n hub-ns
 oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:hub-ns:rhsi
-
 
 # create pipelines 
 oc create -f gitops/pipelines/tasks/provision-callback.yaml
@@ -110,6 +116,9 @@ oc get route | grep el-
 # el-azure-event-listener-hub-ns.apps.cluster-sql9s.sql9s.[Base DNS Domain]
 # el-provisioning-event-listener-hub-ns.apps.cluster-sql9s.sql9s.[Base DNS Domain]
 
+
+# cluster provisioning 
+# ===================
 # you need to create env secrets
 # you can use base64 online site https://emn178.github.io/online-tools/base64_encode.html
 # - update cluster-secrets-list.yaml
@@ -130,5 +139,6 @@ oc create -f gitops/placements/argocd-placement.yaml
 
 
 # create azuer native on DC cluster 
-# namespace per department 
-# oc create pss-azure
+# change requesy : namespace per department oc create pss-azure
+oc new-project azure-native
+oc label ns azure-native argocd.argoproj.io/managed-by=openshift-gitops --overwrite
