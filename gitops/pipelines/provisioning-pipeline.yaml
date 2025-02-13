@@ -23,8 +23,6 @@ spec:
   tasks:
     - name: git-clone
       params:
-        - name: url
-          value: 'https://github.com/wael2000/dora'
         - name: revision
           value: main
         - name: refspec
@@ -55,9 +53,17 @@ spec:
           value: 'registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:868966ef9d4b54952d8a74eb83bba40eb1f52c0148994fa704efd0e3797c61c5'
         - name: userHome
           value: /home/git
+        - name: URL
+          value: 'https://github.com/wael2000/dora'
       taskRef:
-        kind: ClusterTask
-        name: git-clone
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: git-clone
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
       workspaces:
         - name: output
           workspace: source
@@ -70,15 +76,21 @@ spec:
       runAfter:
         - git-clone
       taskRef:
-        kind: ClusterTask
-        name: openshift-client
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: openshift-client
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
       when:
         - input: $(params.type)
           operator: in
           values:
             - ns
       workspaces:
-        - name: manifest-dir
+        - name: manifest_dir
           workspace: source
     - name: cluster-ns
       params:
@@ -89,8 +101,14 @@ spec:
       runAfter:
         - git-clone
       taskRef:
-        kind: ClusterTask
-        name: openshift-client
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: openshift-client
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
       when:
         - input: $(params.type)
           operator: in
@@ -98,6 +116,8 @@ spec:
             - cluster
       workspaces:
         - name: kubeconfig-dir
+          workspace: source
+        - name: manifest_dir
           workspace: source
     - name: callback
       params:
@@ -127,13 +147,22 @@ spec:
       runAfter:
         - cluster-ns
       taskRef:
-        kind: ClusterTask
-        name: openshift-client
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: openshift-client
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
       when:
         - input: $(params.type)
           operator: in
           values:
             - cluster
+      workspaces:
+        - name: manifest_dir
+          workspace: source
     - name: cluster
       params:
         - name: SCRIPT
@@ -143,13 +172,22 @@ spec:
       runAfter:
         - cluster-set
       taskRef:
-        kind: ClusterTask
-        name: openshift-client
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: openshift-client
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
       when:
         - input: $(params.type)
           operator: in
           values:
             - cluster
+      workspaces:
+        - name: manifest_dir
+          workspace: source
     - name: cluster-set
       params:
         - name: SCRIPT
@@ -159,13 +197,22 @@ spec:
       runAfter:
         - secrets
       taskRef:
-        kind: ClusterTask
-        name: openshift-client
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: openshift-client
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
       when:
         - input: $(params.type)
           operator: in
           values:
             - cluster
+      workspaces:
+        - name: manifest_dir
+          workspace: source
     - name: db-config
       params:
         - name: SCRIPT
@@ -175,15 +222,21 @@ spec:
       runAfter:
         - ns-config
       taskRef:
-        kind: ClusterTask
-        name: openshift-client
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: openshift-client
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
       when:
         - input: $(params.type)
           operator: in
           values:
             - ns
       workspaces:
-        - name: manifest-dir
+        - name: manifest_dir
           workspace: source
     - name: app-placement
       params:
@@ -194,15 +247,21 @@ spec:
       runAfter:
         - db-config
       taskRef:
-        kind: ClusterTask
-        name: openshift-client
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: openshift-client
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
       when:
         - input: $(params.type)
           operator: in
           values:
             - ns
       workspaces:
-        - name: manifest-dir
+        - name: manifest_dir
           workspace: source
   workspaces:
     - name: source
