@@ -54,33 +54,32 @@ oc adm policy \
 # Service interconnect
 # web terminal operator
 
+#oc create ns openshift-gitops-operator
+#oc label namespace openshift-gitops-operator openshift.io/cluster-monitoring=true
 
-oc create ns openshift-gitops-operator
-oc label namespace openshift-gitops-operator openshift.io/cluster-monitoring=true
+#cat <<EOF | oc apply -f -
+#apiVersion: operators.coreos.com/v1
+#kind: OperatorGroup
+#metadata:
+#  name: openshift-gitops-operator
+#  namespace: openshift-gitops-operator
+#spec:
+#  upgradeStrategy: Default
+#EOF
 
-cat <<EOF | oc apply -f -
-apiVersion: operators.coreos.com/v1
-kind: OperatorGroup
-metadata:
-  name: openshift-gitops-operator
-  namespace: openshift-gitops-operator
-spec:
-  upgradeStrategy: Default
-EOF
-
-cat <<EOF | oc apply -f -
-apiVersion: operators.coreos.com/v1alpha1
-kind: Subscription
-metadata:
-  name: openshift-gitops-operator
-  namespace: openshift-gitops-operator
-spec:
-  channel: latest 
-  installPlanApproval: Automatic
-  name: openshift-gitops-operator 
-  source: redhat-operators 
-  sourceNamespace: openshift-marketplace 
-EOF
+#cat <<EOF | oc apply -f -
+#apiVersion: operators.coreos.com/v1alpha1
+#kind: Subscription
+#metadata:
+#  name: openshift-gitops-operator
+#  namespace: openshift-gitops-operator
+#spec:
+#  channel: latest 
+#  installPlanApproval: Automatic
+#  name: openshift-gitops-operator 
+#  source: redhat-operators 
+#  sourceNamespace: openshift-marketplace 
+#EOF
 # End: We usually use web console for this 
 
 

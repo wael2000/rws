@@ -6,3 +6,4 @@ gitops/scripts/aws_to_dc.token
 gitops/scripts/azure_native_to_dc.token
 gitops/scripts/azure_to_dc.token
 gitops/provisioning/cluster/cluster-secrets.yaml
+gitops/provisioning/cluster/credentials.yaml
