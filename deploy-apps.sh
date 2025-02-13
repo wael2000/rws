@@ -3,6 +3,7 @@
 # create placement objects if not created
 oc create -f gitops/placements/apps-placement.yaml
 oc create -f gitops/placements/location-placement.yaml
+oc create -f gitops/placements/bm-placement.yaml
 
 
 # create hub-apis sa and generate token with cluster-admin role
