@@ -54,7 +54,7 @@ data:
   data.sql: |-
     insert into Department (id,description,name,status,tenantType,dc,aws,azure) values (1,'Payment and settlement','pss','deprived','ns',false,false,false);
     insert into Department (id,description,name,status,tenantType,dc,aws,azure) values (2,'Treasury','treasury','deprived','cluster',false,false,false);
-    insert into Department (id,description,name,status,tenantType,dc,aws,azure) values (3,'Customer Service','cs','deprived','ns',false,false,false);
+    insert into Department (id,description,name,status,tenantType,dc,aws,azure) values (3,'Customer Service','cs','deprived','vm',false,false,false);
     insert into Department (id,description,name,status,tenantType,dc,aws,azure) values (4,'Compliance and Legal','legal','deprived','nodes',false,false,false);
     insert into Department (id,description,name,status,tenantType,dc,aws,azure) values (5,'Marketing','marketing','deprived','ns',false,false,false);
 
