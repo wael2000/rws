@@ -52,6 +52,7 @@ oc adm policy \
 # pipelines
 # Azure services operator
 # Service interconnect
+# web terminal operator
 
 
 oc create ns openshift-gitops-operator
