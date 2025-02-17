@@ -148,7 +148,17 @@ find gitops/pipelines/ -name "*.yaml" -exec sed -i "s/CLUSTER_URL/${HUB_CLUSTER_
 # find gitops/pipelines/ -name "*.yaml" -exec sed -i '' "s/${HUB_CLUSTER_URL}/CLUSTER_URL/g" {} +
 
 # create all pipelines and pipeline custom tasks 
+if [ $2 = "c" ]
+then
 oc apply -k gitops/pipelines
+fi 
+
+# create all pipelines and pipeline custom tasks 
+if [ $2 = "d" ]
+then
+oc delete -k gitops/pipelines
+fi 
+
 
 # create pipelines 
 #oc create -f gitops/pipelines/tasks/provision-callback.yaml
@@ -169,7 +179,7 @@ oc expose svc el-application-event-listener -n hub-ns
 oc expose svc el-provisioning-event-listener -n hub-ns
 oc expose svc el-azure-event-listener -n hub-ns
 
-oc get route | grep el-
+oc get route -n hub-ns | grep el-
 # update the dashboard-config configmap with route values 
 # el-application-event-listener-hub-ns.apps.cluster-sql9s.sql9s.[Base DNS Domain]
 # el-azure-event-listener-hub-ns.apps.cluster-sql9s.sql9s.[Base DNS Domain]
