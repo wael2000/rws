@@ -7,6 +7,13 @@ export TESTCONTAINERS_RYUK_DISABLED=true
 export HUB_CLUSTER_URL=cluster-ghw99.ghw99.sandbox2941.opentlc.com
 # =====================================================================
 
+# /////////////////// Infra ///////////////////////////
+# ./config.sh infra
+
+# if infra argument is provided
+if [ $1 = "infra" ]
+then
+
 # install the operators
 oc create ns openshift-gitops-operator
 oc label namespace openshift-gitops-operator openshift.io/cluster-monitoring=true
@@ -122,6 +129,16 @@ oc adm policy \
 oc create sa rhsi -n hub-ns
 oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:hub-ns:rhsi
 
+fi
+# enf of if infra argument is provided
+
+# /////////////////// Pipeliens ///////////////////////////
+# ./config.sh pipeline
+
+# if pipeline argument is provided
+if [ $1 = "pipeline" ]
+then
+
 # pipelines
 # replace all CLUSTER_URL with HUB_CLUSTER_URL
 find gitops/pipelines/ -name "*.yaml" -exec sed -i "s/CLUSTER_URL/${HUB_CLUSTER_URL}/g" {} +
@@ -158,6 +175,12 @@ oc get route | grep el-
 # el-azure-event-listener-hub-ns.apps.cluster-sql9s.sql9s.[Base DNS Domain]
 # el-provisioning-event-listener-hub-ns.apps.cluster-sql9s.sql9s.[Base DNS Domain]
 
+fi
+# end of pipeline arguments
+
+
+
+
 
 # cluster provisioning 
 # ===================
@@ -165,7 +188,8 @@ oc get route | grep el-
 # you can use base64 online site https://emn178.github.io/online-tools/base64_encode.html
 # - update cluster-secrets-list.yaml
 # - update cluser-secrets.yaml with the three entries (base64 encoded values)
-oc create -f cluster-secrets.yaml -n hub-ns
+
+#oc create -f cluster-secrets.yaml -n hub-ns
 
 
 # you need to create all placement rule including 
@@ -182,5 +206,5 @@ oc create -f cluster-secrets.yaml -n hub-ns
 
 # create azuer native on DC cluster 
 # change requesy : namespace per department oc create pss-azure
-oc new-project azure-native
-oc label ns azure-native argocd.argoproj.io/managed-by=openshift-gitops --overwrite
+#oc new-project azure-native
+#oc label ns azure-native argocd.argoproj.io/managed-by=openshift-gitops --overwrite
