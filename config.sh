@@ -151,12 +151,21 @@ find gitops/pipelines/ -name "*.yaml" -exec sed -i "s/CLUSTER_URL/${HUB_CLUSTER_
 if [ $2 = "c" ]
 then
 oc apply -k gitops/pipelines
+# once pipelines created, we need to expose the evernt listener svc
+oc expose svc el-application-event-listener -n hub-ns
+oc expose svc el-provisioning-event-listener -n hub-ns
+oc expose svc el-azure-event-listener -n hub-ns
+# print EL routes
+oc get route -n hub-ns | grep el-
+
 fi 
 
 # create all pipelines and pipeline custom tasks 
 if [ $2 = "d" ]
 then
 oc delete -k gitops/pipelines
+# delete event listeners routes
+oc delete route -n hub-ns -l app.kubernetes.io/managed-by=EventListener
 fi 
 
 
@@ -174,12 +183,6 @@ fi
 #          -f gitops/pipelines/application-pipeline-eventlistener.yaml 
 # oc create -f gitops/pipelines/azure-native-pipeline.yaml
 
-# once pipelines created, we need to expose the evernt listener svc
-oc expose svc el-application-event-listener -n hub-ns
-oc expose svc el-provisioning-event-listener -n hub-ns
-oc expose svc el-azure-event-listener -n hub-ns
-
-oc get route -n hub-ns | grep el-
 # update the dashboard-config configmap with route values 
 # el-application-event-listener-hub-ns.apps.cluster-sql9s.sql9s.[Base DNS Domain]
 # el-azure-event-listener-hub-ns.apps.cluster-sql9s.sql9s.[Base DNS Domain]
