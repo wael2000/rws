@@ -1,4 +1,4 @@
-# gitops filder
+# gitops folder
 
 # create placement objects if not created
 oc create -f gitops/placements/apps-placement.yaml
