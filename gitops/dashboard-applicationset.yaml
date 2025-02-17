@@ -25,7 +25,7 @@ spec:
       sources:
         - path: gitops/dashboard
           repoURL: https://github.com/wael2000/dora
-          targetRevision: main
+          targetRevision: ocp4.17
           repositoryType: git
       syncPolicy:
         automated:
