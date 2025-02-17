@@ -7,7 +7,6 @@ export TESTCONTAINERS_RYUK_DISABLED=true
 export HUB_CLUSTER_URL=cluster-ghw99.ghw99.sandbox2941.opentlc.com
 # =====================================================================
 
-
 # install the operators
 oc create ns openshift-gitops-operator
 oc label namespace openshift-gitops-operator openshift.io/cluster-monitoring=true
