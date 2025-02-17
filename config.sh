@@ -65,6 +65,7 @@ oc create -f gitops/placements/argocd-placement.yaml
 # END
 
 # OpenShift pipelines
+# !!!!! check the issue of tekton CRD objects are created cluster wide
 # BEGIN
 cat <<EOF | oc apply -f -
 apiVersion: operators.coreos.com/v1alpha1
@@ -73,11 +74,12 @@ metadata:
   name: openshift-pipelines-operator
   namespace: openshift-operators
 spec:
-  channel:  latest
-  installPlanApproval: manual
-  name: openshift-pipelines-operator-rh 
-  source: redhat-operators 
-  sourceNamespace: openshift-marketplace 
+  channel: latest
+  installPlanApproval: Automatic
+  name: openshift-pipelines-operator-rh
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+  startingCSV: openshift-pipelines-operator-rh.v1.17.1
 EOF
 
 # END
