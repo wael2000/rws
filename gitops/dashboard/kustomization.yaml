@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
 - ../db/dc
 # explicitely add the service object as part of the GitOps scope
-- configmap.yaml
+# - configmap.yaml
 - deployment.yaml
 - service.yaml
 - route.yaml

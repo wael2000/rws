@@ -1,3 +1,8 @@
+# replace CLUSTER_URL with env url (e.g. cluster-dtvxj.dtvxj.sandbox3050.opentlc.com)
+# =====================================================================
+export HUB_CLUSTER_URL=cluster-ghw99.ghw99.sandbox2941.opentlc.com
+# =====================================================================
+
 # create placement objects if not created
 oc create -f gitops/placements/apps-placement.yaml
 oc create -f gitops/placements/location-placement.yaml
@@ -28,7 +33,23 @@ data:
 type: Opaque
 EOF
 
-# once secret is created, the ndeploy the dashboard app
+
+# create application confog map with HUB_CLUSTER_URL
+cat <<EOF | oc apply -f -
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: dashboard-config
+data:
+  pipeline.el: http://el-provisioning-event-listener-hub-ns.apps.${HUB_CLUSTER_URL}
+  ops.pipeline.el: http://el-application-event-listener-hub-ns.apps.${HUB_CLUSTER_URL}
+  azure.pipeline.el: http://el-azure-event-listener-hub-ns.apps.${HUB_CLUSTER_URL}
+  build.pipeline.el: http://dummy
+  department.url: dashboard-hub-ns.apps.${HUB_CLUSTER_URL}
+  policy.url: https://api.${HUB_CLUSTER_URL}:6443/apis/policy.open-cluster-management.io/v1/namespaces/openshift-gitops/policies
+EOF
+
+
 # deploy dashboard app
 oc create -f gitops/dashboard-applicationset.yaml -n openshift-gitops
 
