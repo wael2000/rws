@@ -124,7 +124,9 @@ oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:hub-n
 
 # pipelines
 # replace all CLUSTER_URL with HUB_CLUSTER_URL
-find gitops/pipelines/ -name "*.yaml" -exec sed -i '' "s/CLUSTER_URL/${HUB_CLUSTER_URL}/g" {} +
+find gitops/pipelines/ -name "*.yaml" -exec sed -i "s/CLUSTER_URL/${HUB_CLUSTER_URL}/g" {} +
+# only for Mac OS
+# find gitops/pipelines/ -name "*.yaml" -exec sed -i '' "s/CLUSTER_URL/${HUB_CLUSTER_URL}/g" {} +
 # Note: to restore back 
 # find gitops/pipelines/ -name "*.yaml" -exec sed -i '' "s/${HUB_CLUSTER_URL}/CLUSTER_URL/g" {} +
 
@@ -146,9 +148,9 @@ oc apply -k gitops/pipelines
 # oc create -f gitops/pipelines/azure-native-pipeline.yaml
 
 # once pipelines created, we need to expose the evernt listener svc
-oc expose svc el-application-event-listener
-oc expose svc el-provisioning-event-listener
-oc expose svc el-azure-event-listener
+oc expose svc el-application-event-listener -n hub-ns
+oc expose svc el-provisioning-event-listener -n hub-ns
+oc expose svc el-azure-event-listener -n hub-ns
 
 oc get route | grep el-
 # update the dashboard-config configmap with route values 
