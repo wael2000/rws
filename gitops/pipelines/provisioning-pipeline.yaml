@@ -17,14 +17,15 @@ spec:
     - default: ns
       name: type
       type: string
-    - default: 'http://dashboard-hub-ns.apps.cluster-dtvxj.dtvxj.sandbox3050.opentlc.com/department/provision/commit'
+    - default: 'http://dashboard-hub-ns.apps.CLUSTER_URL/department/provision/commit'
       name: callback_url
+      type: string
+    - default: main
+      name: REVISION
       type: string
   tasks:
     - name: git-clone
       params:
-        - name: revision
-          value: main
         - name: refspec
           value: ''
         - name: submodules
@@ -55,6 +56,8 @@ spec:
           value: /home/git
         - name: URL
           value: 'https://github.com/wael2000/dora'
+        - name: REVISION
+          value: $(params.REVISION)
       taskRef:
         params:
           - name: kind
@@ -132,6 +135,7 @@ spec:
       runAfter:
         - cluster
         - app-placement
+        - provision-vms
       taskRef:
         kind: Task
         name: provisioning-callback
@@ -260,6 +264,31 @@ spec:
           operator: in
           values:
             - ns
+      workspaces:
+        - name: manifest_dir
+          workspace: source
+    - name: provision-vms
+      params:
+        - name: SCRIPT
+          value: sed -e 's/DEPARTMENT/$(params.department)/g' gitops/provisioning/vm.yaml | oc $(params.action) -f - -n openshift-gitops
+        - name: VERSION
+          value: latest
+      runAfter:
+        - git-clone
+      taskRef:
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: openshift-client
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
+      when:
+        - input: $(params.type)
+          operator: in
+          values:
+            - vm
       workspaces:
         - name: manifest_dir
           workspace: source

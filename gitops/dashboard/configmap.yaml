@@ -5,10 +5,10 @@ metadata:
   #annotations:
   #  argocd.argoproj.io/sync-wave: "1"
 data:
-  pipeline.el: http://el-provisioning-event-listener-hub-ns.apps.cluster-dtvxj.dtvxj.sandbox3050.opentlc.com
-  ops.pipeline.el: http://el-application-event-listener-hub-ns.apps.cluster-dtvxj.dtvxj.sandbox3050.opentlc.com
-  azure.pipeline.el: http://el-azure-event-listener-hub-ns.apps.cluster-dtvxj.dtvxj.sandbox3050.opentlc.com
+  pipeline.el: http://el-provisioning-event-listener-hub-ns.apps.CLUSTER_URL
+  ops.pipeline.el: http://el-application-event-listener-hub-ns.apps.CLUSTER_URL
+  azure.pipeline.el: http://el-azure-event-listener-hub-ns.apps.CLUSTER_URL
   build.pipeline.el: http://dummy
-  department.url: dashboard-hub-ns.apps.cluster-dtvxj.dtvxj.sandbox3050.opentlc.com
+  department.url: dashboard-hub-ns.apps.CLUSTER_URL
   #ocp.token: NA
-  policy.url: https://api.cluster-dtvxj.dtvxj.sandbox3050.opentlc.com:6443/apis/policy.open-cluster-management.io/v1/namespaces/openshift-gitops/policies
+  policy.url: https://api.CLUSTER_URL:6443/apis/policy.open-cluster-management.io/v1/namespaces/openshift-gitops/policies

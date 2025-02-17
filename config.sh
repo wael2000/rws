@@ -2,22 +2,90 @@
 export JAVA_HOME=/usr/local/opt/openjdk@17
 export TESTCONTAINERS_RYUK_DISABLED=true
 
-# argocd 
-oc new-project hub-ns
+# replace CLUSTER_URL with env url (e.g. cluster-dtvxj.dtvxj.sandbox3050.opentlc.com)
+# =====================================================================
+export HUB_CLUSTER_URL=cluster-ghw99.ghw99.sandbox2941.opentlc.com
+# =====================================================================
+
+
+# install the operators
+oc create ns openshift-gitops-operator
+oc label namespace openshift-gitops-operator openshift.io/cluster-monitoring=true
+
+# OpenShift gitops
+# BEGIN
+cat <<EOF | oc apply -f -
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: openshift-gitops-operator
+  namespace: openshift-gitops-operator
+  labels:
+    operators.coreos.com/openshift-gitops-operator.openshift-operators: ''
+spec:
+  channel: latest
+  installPlanApproval: manual
+  name: openshift-gitops-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+---
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: openshift-gitops-operator
+  namespace: openshift-gitops-operator
+spec:
+  upgradeStrategy: Default
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: argocd-application-controller-cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: openshift-gitops-argocd-application-controller
+    namespace: openshift-gitops
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+EOF
+
 oc adm groups new cluster-admins
-oc adm policy add-cluster-role-to-group cluster-admin cluster-admins
 oc adm groups add-users cluster-admins admin
+oc adm policy add-cluster-role-to-group cluster-admin cluster-admins
+# create following GitOpsCluster and its binding and placement 
+oc create -f gitops/placements/argocd-placement.yaml
+# END
+
+# OpenShift pipelines
+# BEGIN
+cat <<EOF | oc apply -f -
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: openshift-pipelines-operator
+  namespace: openshift-operators
+spec:
+  channel:  latest
+  installPlanApproval: manual
+  name: openshift-pipelines-operator-rh 
+  source: redhat-operators 
+  sourceNamespace: openshift-marketplace 
+EOF
+
+# END
+
+
+# hub-ns namespace  
+oc new-project hub-ns
+# managed by gitops
 oc label ns hub-ns argocd.argoproj.io/managed-by=openshift-gitops --overwrite
-
-# same for azure-native
-# oc label ns azure-native argocd.argoproj.io/managed-by=openshift-gitops --overwrite
-
-#pipeline
+# assign pipeline sa admin role in openshift-gitops namesapce
 oc policy add-role-to-user admin system:serviceaccount:hub-ns:pipeline -n openshift-gitops
 
 # lift pipeline permission up 
 # create a new cluster role 
-
 cat <<EOF | oc apply -f -
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -48,62 +116,35 @@ oc adm policy \
 
 # install operators
 # Start: We usually use web console for this 
-# Gitops
-# pipelines
 # Azure services operator
 # Service interconnect
-# web terminal operator
 
-#oc create ns openshift-gitops-operator
-#oc label namespace openshift-gitops-operator openshift.io/cluster-monitoring=true
-
-#cat <<EOF | oc apply -f -
-#apiVersion: operators.coreos.com/v1
-#kind: OperatorGroup
-#metadata:
-#  name: openshift-gitops-operator
-#  namespace: openshift-gitops-operator
-#spec:
-#  upgradeStrategy: Default
-#EOF
-
-#cat <<EOF | oc apply -f -
-#apiVersion: operators.coreos.com/v1alpha1
-#kind: Subscription
-#metadata:
-#  name: openshift-gitops-operator
-#  namespace: openshift-gitops-operator
-#spec:
-#  channel: latest 
-#  installPlanApproval: Automatic
-#  name: openshift-gitops-operator 
-#  source: redhat-operators 
-#  sourceNamespace: openshift-marketplace 
-#EOF
-# End: We usually use web console for this 
-
-
-
-# creaet SA account
-
+# RHSI: creaet SA account
 oc create sa rhsi -n hub-ns
 oc adm policy add-cluster-role-to-user cluster-admin system:serviceaccount:hub-ns:rhsi
 
+# pipelines
+# replace all CLUSTER_URL with HUB_CLUSTER_URL
+find gitops/pipelines/ -name "*.yaml" -exec sed -i '' "s/CLUSTER_URL/${HUB_CLUSTER_URL}/g" {} +
+# Note: to restore back 
+# find gitops/pipelines/ -name "*.yaml" -exec sed -i '' "s/${HUB_CLUSTER_URL}/CLUSTER_URL/g" {} +
+
+# create all pipelines and pipeline custom tasks 
+oc apply -k gitops/pipelines
+
 # create pipelines 
-oc create -f gitops/pipelines/tasks/provision-callback.yaml
-oc create -f gitops/pipelines/tasks/deployment-callback.yaml
+#oc create -f gitops/pipelines/tasks/provision-callback.yaml
+#oc create -f gitops/pipelines/tasks/deployment-callback.yaml
+#oc create -f gitops/pipelines/provisioning-pipeline.yaml \
+#          -f gitops/pipelines/provisioning-pipeline-template.yaml \
+#          -f gitops/pipelines/provisioning-pipeline-triggerbinding.yaml \
+#          -f gitops/pipelines/provisioning-pipeline-eventlistener.yaml 
 
-oc create -f gitops/pipelines/provisioning-pipeline.yaml \
-          -f gitops/pipelines/provisioning-pipeline-template.yaml \
-          -f gitops/pipelines/provisioning-pipeline-triggerbinding.yaml \
-          -f gitops/pipelines/provisioning-pipeline-eventlistener.yaml 
-
-oc create -f gitops/pipelines/application-pipeline.yaml \
-          -f gitops/pipelines/application-pipeline-template.yaml \
-          -f gitops/pipelines/application-pipeline-triggerbinding.yaml \
-          -f gitops/pipelines/application-pipeline-eventlistener.yaml 
-
-oc create -f gitops/pipelines/azure-native-pipeline.yaml
+#oc create -f gitops/pipelines/application-pipeline.yaml \
+#          -f gitops/pipelines/application-pipeline-template.yaml \
+#          -f gitops/pipelines/application-pipeline-triggerbinding.yaml \
+#          -f gitops/pipelines/application-pipeline-eventlistener.yaml 
+# oc create -f gitops/pipelines/azure-native-pipeline.yaml
 
 # once pipelines created, we need to expose the evernt listener svc
 oc expose svc el-application-event-listener
@@ -135,8 +176,7 @@ oc create -f cluster-secrets.yaml -n hub-ns
 #oc create -f gitops/placements/location-placement.yaml
 
 # create following GitOpsCluster and its binding and placement 
-oc create -f gitops/placements/argocd-placement.yaml
-
+#oc create -f gitops/placements/argocd-placement.yaml
 
 
 # create azuer native on DC cluster 
