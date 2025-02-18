@@ -7,6 +7,18 @@ export TESTCONTAINERS_RYUK_DISABLED=true
 export HUB_CLUSTER_URL=cluster-ghw99.ghw99.sandbox2941.opentlc.com
 # =====================================================================
 
+# if no argument arguments, print the help
+if [[ $# -eq 0 ]] ; then
+    echo ' ===================================='
+    echo '| use one of the following arguments |'
+    echo '| ./config.sh infra                  |'
+    echo '| ./config.sh pipeline c             |'
+    echo '| ./config.sh pipeline d             |'
+    echo ' ===================================='
+    exit 0
+fi
+
+
 # /////////////////// Infra ///////////////////////////
 # ./config.sh infra
 
