@@ -1,0 +1,20 @@
+kind: Project
+apiVersion: project.openshift.io/v1
+metadata:
+  name: dev
+  labels:
+    env: dev
+---
+kind: Project
+apiVersion: project.openshift.io/v1
+metadata:
+  name: sit
+  labels:
+    env: sit
+---
+kind: Project
+apiVersion: project.openshift.io/v1
+metadata:
+  name: prod
+  labels:
+    env: prod
