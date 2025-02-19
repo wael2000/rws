@@ -1,5 +1,0 @@
-oc label ManagedCluster azure state=off --overwrite
-
-
-
-kubectl patch placement pss-placement --type "json" -p '[{"op":"add","path":"/spec/predicates/0/requiredClusterSelector/labelSelector/matchExpressions/0/values/1","value":"aws"}]'
