@@ -120,7 +120,7 @@ rules:
   verbs: ["get", "watch", "list", "create", "update", "patch", "delete"]
 EOF
 
-# assign namespaces-manager rol to  pipeline service account 
+# assign namespaces-manager role to  pipeline service account 
 oc adm policy add-cluster-role-to-user namespaces-manager system:serviceaccount:hub-ns:pipeline
 # grant pipeline service account access to manage clusters and cluster-sets
 oc adm policy add-cluster-role-to-user open-cluster-management:admin:local-cluster system:serviceaccount:hub-ns:pipeline

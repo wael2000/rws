@@ -10,18 +10,9 @@ spec:
     - default: pss
       name: department
       type: string
-    - default: rtgs
-      name: system
-      type: string
     - default: dc
       name: location
       type: string
-    - default: http://dashboard-hub-ns.apps.CLUSTER_URL/department/deploy/commit
-      name: callback_url
-      type: string
-  workspaces:
-    - name: source
-      optional: false
   tasks:
     - name: git-clone
       params:
@@ -70,17 +61,14 @@ spec:
       workspaces:
         - name: output
           workspace: source
-    - name: deploy-app
+    - name: apply-rbac
       params:
         - name: SCRIPT
-          value: >-
-            sed -e 's/DEPARTMENT/$(params.department)/g' -e
-            's/SYSTEM/$(params.system)/g' -e 's/LOCATION/$(params.location)/g'
-            gitops/applicationset.yaml | oc create -f - -n openshift-gitops
+          value: oc apply -k gitops/security
         - name: VERSION
           value: latest
       runAfter:
-        - git-clone
+        - create-ns
       taskRef:
         params:
           - name: kind
@@ -96,15 +84,12 @@ spec:
           values:
             - deploy
       workspaces:
-        - name: manifest-dir
+        - name: manifest_dir
           workspace: source
-    - name: remove-app
+    - name: remove-rbac
       params:
         - name: SCRIPT
-          value: >-
-            sed -e 's/DEPARTMENT/$(params.department)/g' -e
-            's/SYSTEM/$(params.system)/g' -e 's/LOCATION/$(params.location)/g'
-            gitops/applicationset.yaml | oc delete -f - -n openshift-gitops
+          value: oc delete -k gitops/security
         - name: VERSION
           value: latest
       runAfter:
@@ -124,6 +109,59 @@ spec:
           values:
             - remove
       workspaces:
-        - name: manifest-dir
+        - name: manifest_dir
           workspace: source
+    - name: create-ns
+      params:
+        - name: SCRIPT
+          value: oc new-project dev | oc new-project sit | oc new-project prod
+        - name: VERSION
+          value: latest
+      runAfter:
+        - git-clone
+      taskRef:
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: openshift-client
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
+      when:
+        - input: $(params.action)
+          operator: in
+          values:
+            - deploy
+      workspaces:
+        - name: manifest_dir
+          workspace: source
+    - name: remove-ns
+      params:
+        - name: SCRIPT
+          value: oc delete project dev sit prod
+        - name: VERSION
+          value: latest
+      runAfter:
+        - remove-rbac
+      taskRef:
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: openshift-client
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
+      when:
+        - input: $(params.action)
+          operator: in
+          values:
+            - remove
+      workspaces:
+        - name: manifest_dir
+          workspace: source
+  workspaces:
+    - name: source
+      optional: false
   finally: []
