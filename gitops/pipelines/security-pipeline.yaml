@@ -64,11 +64,11 @@ spec:
     - name: apply-rbac
       params:
         - name: SCRIPT
-          value: oc apply -k gitops/security
+          value: oc apply -f  gitops/rbac-applicationset.yaml
         - name: VERSION
           value: latest
       runAfter:
-        - create-ns
+        - git-clone
       taskRef:
         params:
           - name: kind
@@ -89,61 +89,11 @@ spec:
     - name: remove-rbac
       params:
         - name: SCRIPT
-          value: oc delete -k gitops/security
+          value: oc delete -f  gitops/rbac-applicationset.yaml
         - name: VERSION
           value: latest
       runAfter:
         - git-clone
-      taskRef:
-        params:
-          - name: kind
-            value: task
-          - name: name
-            value: openshift-client
-          - name: namespace
-            value: openshift-pipelines
-        resolver: cluster
-      when:
-        - input: $(params.action)
-          operator: in
-          values:
-            - remove
-      workspaces:
-        - name: manifest_dir
-          workspace: source
-    - name: create-ns
-      params:
-        - name: SCRIPT
-          value: oc new-project dev | oc new-project sit | oc new-project prod
-        - name: VERSION
-          value: latest
-      runAfter:
-        - git-clone
-      taskRef:
-        params:
-          - name: kind
-            value: task
-          - name: name
-            value: openshift-client
-          - name: namespace
-            value: openshift-pipelines
-        resolver: cluster
-      when:
-        - input: $(params.action)
-          operator: in
-          values:
-            - deploy
-      workspaces:
-        - name: manifest_dir
-          workspace: source
-    - name: remove-ns
-      params:
-        - name: SCRIPT
-          value: oc delete project dev sit prod
-        - name: VERSION
-          value: latest
-      runAfter:
-        - remove-rbac
       taskRef:
         params:
           - name: kind
