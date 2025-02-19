@@ -41,7 +41,7 @@ metadata:
   namespace: sit
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: Role
   name: admin
 subjects:
 - apiGroup: rbac.authorization.k8s.io
@@ -60,7 +60,7 @@ metadata:
   namespace: prod
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: Role
   name: admin
 subjects:
 - apiGroup: rbac.authorization.k8s.io
@@ -75,7 +75,7 @@ metadata:
   namespace: prod
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: Role
   name: admin
 subjects:
 - apiGroup: rbac.authorization.k8s.io
