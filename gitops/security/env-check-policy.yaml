@@ -80,13 +80,9 @@ spec:
                 metadata:
                   name: dev-admin-rb
                 roleRef:
-                  name: operator
+                  name: admin
                   apiGroup: rbac.authorization.k8s.io
                   kind: Role
-                subjects:
-                  - name: admin
-                    apiGroup: rbac.authorization.k8s.io
-                    kind: User
           pruneObjectBehavior: None
           remediationAction: inform
           severity: low
