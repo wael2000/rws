@@ -76,7 +76,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: admin
+  name: view
 subjects:
 - apiGroup: rbac.authorization.k8s.io
   kind: User
