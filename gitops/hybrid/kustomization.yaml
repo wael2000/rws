@@ -3,24 +3,8 @@ kind: Kustomization
 
 resources:
 # db cluster on VMs
-- ../provisioning/vm/galera.yaml
+- galera.yaml
 # php-crud microservice in contaienrs
-- ../network/app.yaml
+- app.yaml
 # php-crud serverless
-- ../serverless/ksvc.yaml
-
-patches:
-- patch: |-
-    - op: replace
-      path: /spec/template/spec/containers/0/env/0/value 
-      value: galera
-  target:
-    kind: Deployment
-    name: php-crud
-- patch: |-
-    - op: replace
-      path: /spec/template/spec/containers/0/env/0/value 
-      value: galera
-  target:
-    kind: Service
-    name: ksvc-php-crud
+- ksvc.yaml
