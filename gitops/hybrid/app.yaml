@@ -1,3 +1,54 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: php-crud
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - name: latest
+      annotations: null
+      from:
+        kind: DockerImage
+        name: php-crud
+      generation: 3
+      importPolicy:
+        importMode: Legacy
+      referencePolicy:
+        type: Source  
+---
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: php-crud
+spec:
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'php-crud:latest'
+  resources: {}
+  successfulBuildsHistoryLimit: 5
+  failedBuildsHistoryLimit: 5
+  strategy:
+    type: Source
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        namespace: openshift
+        name: 'php:8.2-ubi8'
+  postCommit: {}
+  source:
+    type: Git
+    git:
+      uri: 'https://github.com/wael2000/php-crud/'
+    contextDir: /
+  triggers:
+    - type: ImageChange
+      imageChange: {}
+    - type: ConfigChange
+  runPolicy: Serial
+---
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -15,7 +66,7 @@ spec:
     spec:
       containers:
         - name: php-crud
-          image: 'image-registry.openshift-image-registry.svc:5000/dev/php-crud:latest'
+          image: 'php-crud:latest'
           ports:
             - containerPort: 8080
               protocol: TCP
