@@ -36,7 +36,8 @@ spec:
       from:
         kind: ImageStreamTag
         namespace: openshift
-        name: 'php:8.2-ubi8'
+        name: 'php:latest'
+        #name: 'php:8.2-ubi8'
   postCommit: {}
   source:
     type: Git
