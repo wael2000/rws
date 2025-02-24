@@ -274,13 +274,3 @@ spec:
       name: udp-4567
       port: 4567
       targetPort: 4567
-#apiVersion: export.kubevirt.io/v1beta1
-#kind: VirtualMachineExport
-#metadata:
-#  name: galera-01-export
-#spec:
-#  source:
-#    apiGroup: "kubevirt.io" 
-#    kind: VirtualMachine 
-#    name: galera-01
-#  ttlDuration: 1h
