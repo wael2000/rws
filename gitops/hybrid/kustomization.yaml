@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
 # db cluster on VMs
-- ../provisioning/vm/gallera.yaml
+- ../provisioning/vm/galera.yaml
 # php-crud microservice in contaienrs
 - ../network/app.yaml
 # php-crud serverless
