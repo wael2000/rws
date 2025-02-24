@@ -31,7 +31,7 @@ spec:
                 secretKeyRef:
                   key: database-password
                   name: mysql
-          image: 'php-crud:latest'
+          image: 'image-registry.openshift-image-registry.svc:5000/demo/php-crud:latest'
           imagePullPolicy: IfNotPresent
           name: ksvc-php-crud
           ports:

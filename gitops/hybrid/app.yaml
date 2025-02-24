@@ -1,3 +1,17 @@
+# db_user = userOSR
+# db_password = WmyArnyFmiyKrt7n
+# db = sampledb
+kind: Secret
+apiVersion: v1
+metadata:
+  name: mysql
+data:
+  database-name: c2FtcGxlZGI=
+  database-password: V215QXJueUZtaXlLcnQ3bg==
+  database-root-password: a0xqZkJkaUpjb2NkNGY1WA==
+  database-user: dXNlck9TUg==
+type: Opaque
+---
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
@@ -67,7 +81,7 @@ spec:
     spec:
       containers:
         - name: php-crud
-          image: 'php-crud:latest'
+          image: 'image-registry.openshift-image-registry.svc:5000/demo/php-crud:latest'
           ports:
             - containerPort: 8080
               protocol: TCP
