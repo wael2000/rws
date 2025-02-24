@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+# db cluster on VMs
+- ../provisioning/vm/gallera.yaml
+# php-crud microservice in contaienrs
+- ../network/app.yaml
+# php-crud serverless
+- ../serverless/ksvc.yaml
+
+patches:
+- patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/env/0/value 
+      value: galera
+  target:
+    kind: Deployment
+    name: php-crud
+- patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/0/env/0/value 
+      value: galera
+  target:
+    kind: Service
+    name: ksvc-php-crud

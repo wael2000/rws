@@ -1,0 +1,20 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: showcase 
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/max-scale: '5'
+        autoscaling.knative.dev/min-scale: '0'
+        autoscaling.knative.dev/target: '20'
+        autoscaling.knative.dev/target-utilization-percentage: '50'  
+        autoscaling.knative.dev/window: 30s
+    spec:
+      containerConcurrency: 1
+      containers:
+        - image: quay.io/openshift-knative/showcase 
+          env:
+            - name: GREET 
+              value: Hallo
