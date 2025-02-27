@@ -2,16 +2,22 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: dev
+  labels:
+    usecase: rbac
 spec: {}
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
   name: sit
+  labels:
+    usecase: rbac  
 spec: {}
 ---
 apiVersion: v1
 kind: Namespace
 metadata:
   name: prod
+  labels:
+    usecase: rbac  
 spec: {}
