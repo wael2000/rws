@@ -1,8 +1,7 @@
-insert into Department (id,description,name,status,tenantType,dc,aws,azure) values (1,'Payment and settlement','pss','deprived','ns',false,false,false);
-insert into Department (id,description,name,status,tenantType,dc,aws,azure) values (2,'Treasury','treasury','deprived','cluster',false,false,false);
-insert into Department (id,description,name,status,tenantType,dc,aws,azure) values (3,'Customer Service','cs','deprived','nodes',false,false,false);
-insert into Department (id,description,name,status,tenantType,dc,aws,azure) values (4,'Compliance and Legal','legal','deprived','ns',false,false,false);
-insert into Department (id,description,name,status,tenantType,dc,aws,azure) values (5,'Marketing','marketing','deprived','ns',false,false,false);
+insert into Department (id,description,name,status,tenantType,dc,aws,azure) values (1,'Grote Projecten en Onderhoud','gpo','deprived','ns',false,false,false);
+insert into Department (id,description,name,status,tenantType,dc,aws,azure) values (2,'Verkeer en Watermanagement','vwm','deprived','cluster',false,false,false);
+insert into Department (id,description,name,status,tenantType,dc,aws,azure) values (3,'Programma''s, Projecten en Onderhoud','ppo','deprived','vms',false,false,false);
+insert into Department (id,description,name,status,tenantType,dc,aws,azure) values (4,'Compliance and Legal','legal','deprived','nodes',false,false,false);
 
 insert into Application (id,name,description,deployed,department_id) values (1,'RTGS','Real-Time Gross Settlement System',false,1);
 insert into Application (id,name,description,deployed,department_id) values (2,'ACH','Automated Clearing House System',true,1);
