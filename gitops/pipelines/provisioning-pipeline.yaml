@@ -55,7 +55,7 @@ spec:
         - name: userHome
           value: /home/git
         - name: URL
-          value: 'https://github.com/wael2000/dora'
+          value: 'https://github.com/wael2000/rws'
         - name: REVISION
           value: $(params.REVISION)
       taskRef:

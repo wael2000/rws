@@ -20,7 +20,7 @@ spec:
       project: default
       sources:
         - repositoryType: git
-          repoURL: https://github.com/wael2000/dora
+          repoURL: https://github.com/wael2000/rws
           targetRevision: main
           path: gitops/provisioning/ns
       destination:

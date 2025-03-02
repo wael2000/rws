@@ -24,7 +24,7 @@ spec:
       project: default
       sources:
         - path: gitops/dashboard
-          repoURL: https://github.com/wael2000/dora
+          repoURL: https://github.com/wael2000/rws
           targetRevision: ocp4.17
           repositoryType: git
       syncPolicy:

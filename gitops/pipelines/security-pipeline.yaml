@@ -7,17 +7,11 @@ spec:
     - default: deploy
       name: action
       type: string
-    - default: pss
-      name: department
-      type: string
-    - default: dc
-      name: location
-      type: string
   tasks:
     - name: git-clone
       params:
         - name: URL
-          value: https://github.com/wael2000/dora
+          value: 'https://github.com/wael2000/rws'
         - name: refspec
           value: ''
         - name: submodules
@@ -43,12 +37,11 @@ spec:
         - name: verbose
           value: 'true'
         - name: gitInitImage
-          value: >-
-            registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:868966ef9d4b54952d8a74eb83bba40eb1f52c0148994fa704efd0e3797c61c5
+          value: 'registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:868966ef9d4b54952d8a74eb83bba40eb1f52c0148994fa704efd0e3797c61c5'
         - name: userHome
           value: /home/git
         - name: REVISION
-          value: ocp4.17
+          value: main
       taskRef:
         params:
           - name: kind
@@ -113,5 +106,3 @@ spec:
           workspace: source
   workspaces:
     - name: source
-      optional: false
-  finally: []

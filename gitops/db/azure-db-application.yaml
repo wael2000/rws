@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     path: gitops/db/azure-native
-    repoURL: https://github.com/wael2000/dora
+    repoURL: https://github.com/wael2000/rws
     targetRevision: main
   syncPolicy:
     syncOptions:
