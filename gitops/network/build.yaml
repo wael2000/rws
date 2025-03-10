@@ -30,7 +30,7 @@ spec:
       name: 'php-crud:latest'
   resources: 
     limits:
-      cpu: '512'
+      cpu: '512m'
       memory: 512Mi
     requests:
       cpu: 128m
