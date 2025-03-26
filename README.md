@@ -17,3 +17,6 @@ with the help of following objects.
 - Service Resiliency
 - Site Resiliency 
 - Incident reporting (Governance, Policy & Audit)
+- AI (Where is Teddy) https://github.com/redhat-developer-demos/where-is-teddy
+
+# https://www.redhat.com/en/blog/how-instructlabs-synthetic-data-generation-enhances-llms

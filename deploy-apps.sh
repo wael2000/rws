@@ -6,7 +6,7 @@ export HUB_CLUSTER_URL=cluster-ghw99.ghw99.sandbox2941.opentlc.com
 # create placement objects if not created
 oc create -f gitops/placements/apps-placement.yaml
 oc create -f gitops/placements/location-placement.yaml
-oc create -f gitops/placements/bm-placement.yaml
+oc create -f gitops/placements/baremetal-placement.yaml
 
 oc project hub-ns
 # create hub-apis sa and generate token with cluster-admin role

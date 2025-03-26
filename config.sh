@@ -27,6 +27,9 @@ fi
 if [ $1 = "infra" ]
 then
 
+# add provider=dc lable to local cluster
+oc label managedcluster local-cluster provider=dc
+
 # install the operators
 oc create ns openshift-gitops-operator
 oc label namespace openshift-gitops-operator openshift.io/cluster-monitoring=true
