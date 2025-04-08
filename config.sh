@@ -175,17 +175,17 @@ oc expose svc el-provisioning-event-listener -n hub-ns
 oc expose svc el-azure-event-listener -n hub-ns
 # print EL routes
 oc get route -n hub-ns | grep el-
-
 fi 
+# end of create pipelines
 
-# create all pipelines and pipeline custom tasks 
+# delete all pipelines and pipeline custom tasks 
 if [ $2 = "d" ]
 then
 oc delete -k gitops/pipelines
 # delete event listeners routes
 oc delete route -n hub-ns -l app.kubernetes.io/managed-by=EventListener
 fi 
-
+# end of delete pipelines
 
 # create pipelines 
 #oc create -f gitops/pipelines/tasks/provision-callback.yaml
