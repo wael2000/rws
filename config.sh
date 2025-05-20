@@ -5,7 +5,7 @@ export TESTCONTAINERS_RYUK_DISABLED=true
 
 # replace CLUSTER_URL with env url (e.g. cluster-dtvxj.dtvxj.sandbox3050.opentlc.com)
 # =====================================================================
-export HUB_CLUSTER_URL=cluster-ghw99.ghw99.sandbox2941.opentlc.com
+export HUB_CLUSTER_URL=cluster-v94dp.v94dp.sandbox2256.opentlc.com
 # =====================================================================
 
 # if no argument arguments, print the help
@@ -159,9 +159,9 @@ then
 
 # pipelines
 # replace all CLUSTER_URL with HUB_CLUSTER_URL
-find gitops/pipelines/ -name "*.yaml" -exec sed -i "s/CLUSTER_URL/${HUB_CLUSTER_URL}/g" {} +
+#find gitops/pipelines/ -name "*.yaml" -exec sed -i "s/CLUSTER_URL/${HUB_CLUSTER_URL}/g" {} +
 # only for Mac OS
-# find gitops/pipelines/ -name "*.yaml" -exec sed -i '' "s/CLUSTER_URL/${HUB_CLUSTER_URL}/g" {} +
+find gitops/pipelines/ -name "*.yaml" -exec sed -i '' "s/CLUSTER_URL/${HUB_CLUSTER_URL}/g" {} +
 # Note: to restore back 
 # find gitops/pipelines/ -name "*.yaml" -exec sed -i '' "s/${HUB_CLUSTER_URL}/CLUSTER_URL/g" {} +
 

@@ -13,7 +13,7 @@ spec:
     - name: type
       value: vm
     - name: callback_url
-      value: 'http://dashboard-hub-ns.apps.CLUSTER_URL/department/provision/commit'
+      value: 'http://dashboard-hub-ns.apps.cluster-v94dp.v94dp.sandbox2256.opentlc.com/department/provision/commit'
     - name: REVISION
       value: ocp4.17
   pipelineRef:
