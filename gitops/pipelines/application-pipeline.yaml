@@ -22,9 +22,9 @@ spec:
   tasks:
     - name: git-clone
       params:
-        - name: url
+        - name: URL
           value: 'https://github.com/wael2000/rws'
-        - name: revision
+        - name: REVISION
           value: main
         - name: refspec
           value: ''
@@ -55,8 +55,14 @@ spec:
         - name: userHome
           value: /home/git
       taskRef:
-        kind: ClusterTask
-        name: git-clone
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: git-clone
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
       workspaces:
         - name: output
           workspace: source
@@ -69,15 +75,21 @@ spec:
       runAfter:
         - git-clone
       taskRef:
-        kind: ClusterTask
-        name: openshift-client
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: openshift-client
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
       when:
         - input: $(params.action)
           operator: in
           values:
             - deploy
       workspaces:
-        - name: manifest-dir
+        - name: manifest_dir
           workspace: source
     - name: remove-app
       params:
@@ -88,15 +100,21 @@ spec:
       runAfter:
         - git-clone
       taskRef:
-        kind: ClusterTask
-        name: openshift-client
+         params:
+          - name: kind
+            value: task
+          - name: name
+            value: openshift-client
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
       when:
         - input: $(params.action)
           operator: in
           values:
             - remove
       workspaces:
-        - name: manifest-dir
+        - name: manifest_dir
           workspace: source
     - name: deploy-callback
       params:
