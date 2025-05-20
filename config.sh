@@ -157,6 +157,8 @@ fi
 if [ $1 = "pipeline" ]
 then
 
+tar -cvzf pipelines.tar.gz gitops/pipelines
+
 # pipelines
 # replace all CLUSTER_URL with HUB_CLUSTER_URL
 #find gitops/pipelines/ -name "*.yaml" -exec sed -i "s/CLUSTER_URL/${HUB_CLUSTER_URL}/g" {} +
@@ -205,6 +207,9 @@ fi
 # el-application-event-listener-hub-ns.apps.cluster-sql9s.sql9s.[Base DNS Domain]
 # el-azure-event-listener-hub-ns.apps.cluster-sql9s.sql9s.[Base DNS Domain]
 # el-provisioning-event-listener-hub-ns.apps.cluster-sql9s.sql9s.[Base DNS Domain]
+
+tar -xvzf pipelines.tar.gz -C .
+rm pipelines.tar.gz
 
 fi
 # end of pipeline arguments
