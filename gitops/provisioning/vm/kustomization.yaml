@@ -3,4 +3,4 @@ kind: Kustomization
 
 resources:
 - rhel8.yaml
-- rhel9.yaml
+#- rhel9.yaml
